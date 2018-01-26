@@ -47,13 +47,13 @@ li a:hover:not(.active) {
   .image {
     display: table-row;
     vertical-align: top;
-    width: 70%;
+    width: 100%;
     padding: 14px 16px;
   }
 
   #Velk {
     display: table-row;
-    vertical-align: bottom;
+    vertical-align: top;
     width: 30%
     text-align: center;
     padding: .5rem;
