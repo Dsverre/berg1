@@ -14,5 +14,23 @@
         <li><a href="idk.html">Jeg vet ikke enda</a></li>
       </ul>
     </nav>
+    <div id="map">
+      <script>
+        function initMap() {
+          var bergen = {lat: 60.388395, lng: 5.323619};
+          var map = new google.maps.Map(document.getElementById('map'), {
+            zoom: 13,
+            center: bergen
+          });
+          var marker = new google.maps.Marker({
+            position: bergen,
+            map: map
+          });
+        }
+      </script>
+      <script async defer
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAZPm1R0LYAI0sKx8xSxTeWzYZ6yA28skI&callback=initMap">
+      </script>
+    </div>
   </body>
 </html>
