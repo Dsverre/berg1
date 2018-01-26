@@ -36,6 +36,11 @@ li a:hover:not(.active) {
     background-color: SkyBlue;
 }
 
+#map {
+        height: 600px;
+        width: 100%;
+       }
+
 @media screen and (max-width:750px) {
 
   .Intro {
