@@ -101,14 +101,14 @@ li a:hover:not(.active) {
 
   .Widget {
     display: table-cell;
-    width: 70%;
+    width: 40%;
     vertical-align: middle;
     padding: 14px 16px;
   }
 
   #idag {
     display: table-cell;
-    width: 30%
+    width: 60%
     vertical-align: middle;
     text-align: center;
     padding: .5rem;
