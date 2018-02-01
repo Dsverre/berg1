@@ -49,11 +49,28 @@ li a:hover:not(.active) {
     width: 100%;
   }
 
+  .Widget {
+    display: table-row;
+    vertical-align: top;
+    width: 100%;
+    padding: 14px 16px;
+  }
+
   .image {
     display: table-row;
     vertical-align: top;
     width: 100%;
     padding: 14px 16px;
+  }
+
+  #idag {
+    display: table-row;
+    vertical-align: top;
+    width: 30%
+    text-align: center;
+    padding: .5rem;
+    font-size: 1.0rem;
+    font-family: "Trebuchet MS", Verdana, sans-serif;
   }
 
   #Velk {
@@ -80,6 +97,23 @@ li a:hover:not(.active) {
     width: 70%;
     vertical-align: middle;
     padding: 14px 16px;
+  }
+
+  .Widget {
+    display: table-cell;
+    width: 70%;
+    vertical-align: middle;
+    padding: 14px 16px;
+  }
+
+  #idag {
+    display: table-cell;
+    width: 30%
+    vertical-align: middle;
+    text-align: center;
+    padding: .5rem;
+    font-size: 1.5rem;
+    font-family: "Trebuchet MS", Verdana, sans-serif;
   }
 
   #Velk {

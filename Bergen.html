@@ -14,7 +14,7 @@
         <li><a class="active" href="Bergen.html">Bergen i dag</a></li>
       </ul>
     </nav>
-    <div class="Tekst">
+    <div class="Intro">
       <p id="idag">
         Her kan du se forskjellige aktiviteter som skjer hver dag i Bergen by.
         <br><br>
@@ -22,16 +22,18 @@
         kan du besøke <a href="https://www.visitbergen.com/hva-skjer.">visitBergen.com</a>
         <br>
       <p/>
-      <iframe
-	       src="http://widget.visitbergen.com/?rss=1&amp;lang=no&amp;m=1&amp;w=298&amp;t=1"
-	       width="300"
-	       height="1024"
-	       onload="
-		       var a;try{a=this.contentWindow.document.documentElement;}catch(e){try{a=this.contentDocument.documentElement;}catch(ee){}}
-		       if(a){this.height=1;this.height=a.scrollHeight;}"
-	       frameborder="0"
-	       scrolling="no">
-       </iframe>
+      <div class="Widget">
+        <iframe
+           src="http://widget.visitbergen.com/?rss=1&amp;lang=no&amp;m=1&amp;w=298&amp;t=1"
+  	       width="300"
+  	       height="1024"
+  	       onload="
+  		       var a;try{a=this.contentWindow.document.documentElement;}catch(e){try{a=this.contentDocument.documentElement;}catch(ee){}}
+  		       if(a){this.height=1;this.height=a.scrollHeight;}"
+  	       frameborder="0"
+  	       scrolling="yes">
+         </iframe>
+       </div>
      </div>
   </body>
 </html>
