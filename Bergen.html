@@ -1,0 +1,37 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <link rel="stylesheet" type="text/css" href="css/base.css">
+    <title> Bergen i dag </title>
+  </head>
+  <body>
+    <nav>
+      <ul>
+        <li><a href="index.html">Forsiden</a></li>
+        <li><a href="map.html">Kart over Bergen</a></li>
+        <li><a class="active" href="Bergen.html">Bergen i dag</a></li>
+      </ul>
+    </nav>
+    <div class="Tekst">
+      <p id="idag">
+        Her kan du se forskjellige aktiviteter som skjer hver dag i Bergen by.
+        <br><br>
+        For en fullstending oversikt og aktivitet frem i tid,
+        kan du besøke <a href="https://www.visitbergen.com/hva-skjer.">visitBergen.com</a>
+        <br>
+
+    <iframe
+	src="http://widget.visitbergen.com/?rss=1&amp;lang=no&amp;m=1&amp;w=298&amp;t=1"
+	width="300"
+	height="1024"
+	onload="
+		var a;try{a=this.contentWindow.document.documentElement;}catch(e){try{a=this.contentDocument.documentElement;}catch(ee){}}
+		if(a){this.height=1;this.height=a.scrollHeight;}
+	"
+	frameborder="0"
+	scrolling="no"
+></iframe>
+  </body>
+</html>
