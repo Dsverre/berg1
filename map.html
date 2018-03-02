@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width">
-    <link rel="stylesheet" type="text/css" href="css/base.css">
+    <link rel="stylesheet" type="text/css" href="css/alternativ.css">
     <script type="text/javascript" src=js/base.js></script>
     <title> Kart over Bergen - med markører </title>
   </head>
@@ -15,10 +15,18 @@
         <li><a href="Bergen.html">Bergen i dag</a></li>
       </ul>
     </nav>
-    <div id="map">
-      <script async defer
-      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAZPm1R0LYAI0sKx8xSxTeWzYZ6yA28skI&callback=initMap">
-      </script>
-    </div>
+      <section class="main">
+        <source id="map">
+          <script async defer
+          src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAZPm1R0LYAI0sKx8xSxTeWzYZ6yA28skI&callback=initMap">
+          </script>
+        </source>
+        <main class="lavs">
+          <p> Her skal det være en liste over toaletter i Bergen, samt en søkebar drevet av RegEx.
+          </p>
+        </main>
+
+
+
   </body>
 </html>
