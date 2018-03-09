@@ -36,10 +36,7 @@ li a:hover:not(.active) {
     background-color: SkyBlue;
 }
 
-#map {
-        height: 600px;
-        width: 100%;
-       }
+
 
 
 @media screen and (max-width:750px) {
@@ -51,6 +48,19 @@ li a:hover:not(.active) {
     flex-direction: column;
   }
 
+  #map {
+    height: 450px;
+    width: 100%;
+  }
+
+  .widget {
+    margin-top: 30px;
+    text-align: center;
+  }
+
+  .intro {
+    text-align: center;
+  }
 }
 
 @media screen and (min-width: 750px) {
@@ -63,13 +73,27 @@ li a:hover:not(.active) {
   }
 
   .intro {
-    width: 33%;
+    width: 40%;
     height: 100%;
+    text-align: center;
   }
 
   .image {
-    width 66%;
+    width 60%;
     height: 100%;
   }
+  .widget {
+    width: 60%;
+    height: 100%;
+    text-align: center;
+  }
 
+  .lavs {
+    text-align: center;
+  }
+
+  #map {
+          height: 600px;
+          width: 100%;
+  }
 }
