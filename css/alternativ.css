@@ -48,17 +48,22 @@ li a:hover:not(.active) {
     flex-direction: column;
   }
 
+  .intro {
+    text-align: center;
+  }
+
+  .lavs {
+    margin-top: 30px;
+    text-align: center;
+  }
+
   #map {
     height: 450px;
     width: 100%;
   }
 
-  .widget {
+  #widget {
     margin-top: 30px;
-    text-align: center;
-  }
-
-  .intro {
     text-align: center;
   }
 }
@@ -79,21 +84,60 @@ li a:hover:not(.active) {
   }
 
   .image {
-    width 60%;
-    height: 100%;
-  }
-  .widget {
     width: 60%;
     height: 100%;
-    text-align: center;
   }
 
   .lavs {
+    margin-top: 30px;
     text-align: center;
   }
 
   #map {
           height: 600px;
           width: 100%;
+  }
+
+  #widget {
+    width: 60%;
+    height: 100%;
+    text-align: center;
+  }
+}
+
+@media screen and (min-width: 1400px) {
+
+  .main {
+    display: flex;
+    height: 750px;
+    width: 100%;
+    flex-direction: row;
+  }
+
+  .intro {
+    width: 40%;
+    height: 100%;
+    text-align: center;
+  }
+
+  .image {
+    width: 60%;
+    height: 100%;
+  }
+
+  .lavs {
+    margin-top: 30px;
+    text-align: center;
+  }
+
+  #map {
+          height: 600px;
+          width: 100%;
+  }
+
+  #widget {
+    width: 60%;
+    height: 100%;
+    text-align: center;
   }
 }

@@ -16,16 +16,16 @@
       </ul>
     </nav>
       <section class="main">
-        <source id="map">
+        <object id="map">
           <script async defer
           src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAZPm1R0LYAI0sKx8xSxTeWzYZ6yA28skI&callback=initMap">
           </script>
-        </source>
+        </object>
         <aside class="lavs">
-          <p> Her skal det være en liste over toaletter i Bergen, samt en søkebar drevet av RegEx.
-          </p>
           <input type="text" id="sokinput" placeholder="Skriv inn søkekriterier her...">
           <button type="button" id="sok" onclick="sokeFunk()"> Søk i toaletter </button>
+          <p> Her skal det være en liste over toaletter i Bergen, samt en søkebar drevet av RegEx.
+          </p>
         </aside>
       </section>
   </body>
