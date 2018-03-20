@@ -43,7 +43,6 @@ li a:hover:not(.active) {
 
   .main {
     display: flex;
-    height: 750px;
     width: 100%;
     flex-direction: column;
   }
@@ -72,7 +71,6 @@ li a:hover:not(.active) {
 
   .main {
     display: flex;
-    height: 750px;
     width: 100%;
     flex-direction: row;
   }
@@ -89,6 +87,7 @@ li a:hover:not(.active) {
   }
 
   .lavs {
+    width: 60%;
     margin-top: 30px;
     text-align: center;
   }
@@ -109,7 +108,6 @@ li a:hover:not(.active) {
 
   .main {
     display: flex;
-    height: 750px;
     width: 100%;
     flex-direction: row;
   }
@@ -126,12 +124,13 @@ li a:hover:not(.active) {
   }
 
   .lavs {
+    width: 40%;
     margin-top: 30px;
     text-align: center;
   }
 
   #map {
-          height: 600px;
+          height: 750px;
           width: 100%;
   }
 
