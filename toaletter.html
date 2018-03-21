@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width">
     <link rel="stylesheet" type="text/css" href="css/alternativ.css">
     <script type="text/javascript" src=js/base.js></script>
+    <script type="text/javascript" src=js/dokart.json></script>
     <title> Kart over Bergen - med markører </title>
   </head>
   <body>
@@ -28,30 +29,14 @@
         </aside>
       </section>
 
-      <script>
-      var obj1 = JSON.parse('{ "number":"1", "name":"NONNESETER TERMINAL, SØR"}');
-      var obj2 = JSON.parse('{ "number":"2", "name":"NONNESETER TERMINAL, NORD"}');
-      var obj3 = JSON.parse('{ "number":"3", "name":"SKYSS KUNDESENTER"}');
-      var obj4 = JSON.parse('{ "number":"4", "name":"JERNBANESTASJONEN"}');
-      var obj5 = JSON.parse('{ "number":"5", "name":"MATHALLEN"}');
-      var obj6 = JSON.parse('{ "number":"6", "name":"STRANDKAITERMINALEN"}');
-      var obj7 = JSON.parse('{ "number":"7", "name":"BERGEN KOMMUNE, INNBYGGERSERVICE"}');
-      var obj8 = JSON.parse('{ "number":"8", "name":"BERGEN STORSENTER"}');
-      var obj9 = JSON.parse('{ "number":"9", "name":"SUNDT MOTEHUS"}');
-      var obj10 = JSON.parse('{ "number":"10", "name":"XHIBITION"}');
-      var obj11 = JSON.parse('{ "number":"11", "name":"GALLERIET"}');
-      var obj12 = JSON.parse('{ "number":"12", "name":"KLØVERHUSET"}');
-      var obj13 = JSON.parse('{ "number":"13", "name":"BRYGGEN BESØKSSENTER"}');
-      var obj14 = JSON.parse('{ "number":"14", "name":"C. SUNDTSGT"}');
+  <script>
+  for(i = 0; i < toilets.length; i++) {
+    var node = document.createElement("LI");
+    var textnode = document.createTextNode(i+1 + ": " + toilets[i].plassering);
+    node.appendChild(textnode);
+    document.getElementById("toaliste").appendChild(node);
+    }
 
-      var toaletter = [obj1, obj2, obj3, obj4, obj5, obj6, obj7, obj8, obj9, obj10, obj11, obj12, obj13, obj14];
-
-      for(i = 0; i < toaletter.length; i++) {
-      var node = document.createElement("LI");
-      var textnode = document.createTextNode(toaletter[i].number + ": " + toaletter[i].name);
-      node.appendChild(textnode);
-      document.getElementById("toaliste").appendChild(node);
-    };
-    </script>
+  </script>
   </body>
 </html>
