@@ -9,3 +9,5 @@
 - Lage markers for hvert objekt i toilets[].
   Optimalisere søketreffrepresentasjonen (valgfritt)
   Lage infovindu (valgfritt)
+
+- Se kommentar. (Hardcode inn tall i dokart.json)
