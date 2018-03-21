@@ -10,4 +10,4 @@
   Optimalisere søketreffrepresentasjonen (valgfritt)
   Lage infovindu (valgfritt)
 
-- Se kommentar. (Hardcode inn tall i dokart.json)
+- Se kommentar. (Hardcode inn tall i dokart.json) - Gjort ferdig
