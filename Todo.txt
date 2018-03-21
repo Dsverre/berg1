@@ -6,8 +6,8 @@
     - Enten kopiere toaletter.html, men bytte ut tekstinput med korresponderende rullegardinmenyer etc.
     - Kode inn en blokk som er skjult frem til det trykkes en knapp for å vise utvidet søk.
 
-- Lage markers for hvert objekt i toilets[].
+- Lage markers for hvert objekt i toilets[]. FERDIG
   Optimalisere søketreffrepresentasjonen (valgfritt)
-  Lage infovindu (valgfritt)
+  Lage infovindu (valgfritt) - FERDIG? tok med adresse
 
-- Se kommentar. (Hardcode inn tall i dokart.json) - Gjort ferdig
+- Se kommentar. (Hardcode inn tall i dokart.json) - FERDIG
