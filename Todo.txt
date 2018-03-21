@@ -1,0 +1,11 @@
+- Skrive sokeFunk(), slik at den lagrer søkeparameterne i et objekt, for så å sammenligne dette objektet med objekter i toilets[].
+  Lagre denne sammenligningen i et array, for så å sjekke om det var et treff.
+  - Oppdater så #toliste til å reflektere disse treffene.
+
+- Lage en avansert søkeside.
+    - Enten kopiere toaletter.html, men bytte ut tekstinput med korresponderende rullegardinmenyer etc.
+    - Kode inn en blokk som er skjult frem til det trykkes en knapp for å vise utvidet søk.
+
+- Lage markers for hvert objekt i toilets[].
+  Optimalisere søketreffrepresentasjonen (valgfritt)
+  Lage infovindu (valgfritt)

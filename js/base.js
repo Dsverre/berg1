@@ -51,3 +51,7 @@ function initMap() {
   });
 
 }
+
+function sokeFunk() {
+  var searchResults = [];
+}
