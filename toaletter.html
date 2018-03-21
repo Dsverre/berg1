@@ -34,7 +34,7 @@
   <script>
   for(i = 0; i < toilets.length; i++) {
     var node = document.createElement("LI");
-    var textnode = document.createTextNode(toilets[i].num +". " + toilets[i].plassering); <!--Hardcode inn tall til hver eneste oppføring i JSON -->
+    var textnode = document.createTextNode(toilets[i].num +". " + toilets[i].plassering); 
     node.appendChild(textnode);
     document.getElementById("toaliste").appendChild(node);
     }
