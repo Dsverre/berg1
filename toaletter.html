@@ -30,15 +30,14 @@
       </section>
 
 <!-- Når det lages et nytt array for å holde søkeresultatene, så må det kjøres en ny utgave av koden under, men hvor arrayet den itererer gjennom er det som inneholder søkeresutlatene.-->
+    <script>
+      for(i = 0; i < toilets.length; i++) {
+        var node = document.createElement("LI");
+        var textnode = document.createTextNode(toilets[i].num +". " + toilets[i].plassering);
+        node.appendChild(textnode);
+        document.getElementById("toaliste").appendChild(node);
+        }
 
-  <script>
-  for(i = 0; i < toilets.length; i++) {
-    var node = document.createElement("LI");
-    var textnode = document.createTextNode(toilets[i].num +". " + toilets[i].plassering); 
-    node.appendChild(textnode);
-    document.getElementById("toaliste").appendChild(node);
-    }
-
-  </script>
+    </script>
   </body>
 </html>

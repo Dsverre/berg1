@@ -327,13 +327,37 @@ function initMap() {
     infowindow14.open(map, marker14);
   });
 
-
-
-
-
-
 }
 
+
+
+
+
 function sokeFunk() {
-  var searchResults = [];
+if(document.getElementById("sokinput").value == "") return;
+
+  var sokeParam = document.getElementById("sokinput").value;
+  var sokeRes = [];
+
+  for(i = 0; i < toilets.length; i++) {
+    if(sokeParam == toilets[i].plassering) {
+      sokeRes.push(toilets[i]);
+    };
+  };
+
+  var Parent = document.getElementById("toaliste");
+  while(Parent.hasChildNodes())
+  {
+     Parent.removeChild(Parent.firstChild);
+  };
+
+
+
+  for(i = 0; i < sokeRes.length; i++) {
+    var node = document.createElement("LI");
+    var textnode = document.createTextNode(sokeRes[i].num +". " + sokeRes[i].plassering);
+    node.appendChild(textnode);
+    document.getElementById("toaliste").appendChild(node);
+  };
+
 }
