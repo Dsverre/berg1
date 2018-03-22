@@ -346,7 +346,7 @@ function hideMarkers() {
 function sokeFunk() {
   if(document.getElementById("sokinput").value == "") return;
 
-  var sokeParam = document.getElementById("sokinput").value;
+  var sokeParam = document.getElementById("sokinput").value.toUpperCase();
   var sokeRes = [];
   var x;
   for(i = 0; i < toilets.length; i++) {
