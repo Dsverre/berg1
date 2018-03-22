@@ -1,3 +1,5 @@
+var markers = []
+
 function initMap() {
   var nonnesoer = {lat: 60.3879681, lng: 5.334608};
   var nonnenord = {lat: 60.3884988, lng: 5.3345382};
@@ -327,31 +329,42 @@ function initMap() {
     infowindow14.open(map, marker14);
   });
 
+  markers = [marker1, marker2, marker3, marker4, marker5, marker6, marker7, marker8, marker9, marker10, marker11, marker12, marker13, marker14];
+
+
+}
+
+
+function hideMarkers() {
+  for(i = 0; i < markers.length; i++) {
+    markers[i].setVisible(false);
+  };
 }
 
 
 
-
-
 function sokeFunk() {
-if(document.getElementById("sokinput").value == "") return;
+  if(document.getElementById("sokinput").value == "") return;
 
   var sokeParam = document.getElementById("sokinput").value;
   var sokeRes = [];
-
+  var x;
   for(i = 0; i < toilets.length; i++) {
     if(sokeParam == toilets[i].plassering) {
       sokeRes.push(toilets[i]);
-    };
-  };
+      x = i;
+      };
+    }
+
+  if(sokeRes == 0) return;
+
+  hideMarkers();
+  markers[x].setVisible(true);
 
   var Parent = document.getElementById("toaliste");
-  while(Parent.hasChildNodes())
-  {
+  while(Parent.hasChildNodes()) {
      Parent.removeChild(Parent.firstChild);
   };
-
-
 
   for(i = 0; i < sokeRes.length; i++) {
     var node = document.createElement("LI");
