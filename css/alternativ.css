@@ -37,6 +37,11 @@ nav a.active {
     background-color: SkyBlue;
 }
 
+#asok {
+  margin-left: 150px;
+
+}
+
 #toaliste {
   margin-top: 20px;
   margin-left: 10px;
@@ -44,6 +49,35 @@ nav a.active {
   list-style-type: none;
 }
 
+#filter {
+
+  margin-left: 12%;
+  text-align: left;
+}
+
+#big {
+  display: flex;
+  flex-direction: row;
+}
+
+.checkBox {
+  margin: auto;
+}
+
+.container {
+  display: flex;
+  width: 33%;
+  flex-direction: column;
+  text-align: center;
+
+}
+
+.small {
+    height: 30px;
+    margin: 0;
+    margin-top: 15px;
+
+}
 
 @media screen and (max-width:750px) {
 
@@ -58,6 +92,7 @@ nav a.active {
   }
 
   .lavs {
+    min-width: 323px;
     margin-top: 30px;
     text-align: center;
   }
@@ -94,6 +129,7 @@ nav a.active {
 
   .lavs {
     width: 60%;
+    min-width: 323px;
     margin-top: 30px;
     text-align: center;
   }

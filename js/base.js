@@ -321,7 +321,7 @@ function initMap() {
   });
 
   var marker14 = new google.maps.Marker({
-    position: sundt,
+    position: csundt,
     map: map
   });
 
@@ -334,10 +334,27 @@ function initMap() {
 
 }
 
+function refresh() {
 
-function hideMarkers() {
+    var Parent = document.getElementById("toaliste");
+    while(Parent.hasChildNodes()) {
+       Parent.removeChild(Parent.firstChild);
+    };
+
+  for(i = 0; i < toilets.length; i++) {
+    var node = document.createElement("LI");
+    var textnode = document.createTextNode(toilets[i].num +". " + toilets[i].plassering);
+    node.appendChild(textnode);
+    document.getElementById("toaliste").appendChild(node);
+  };
+  showMarkers(true);
+  flag = 0;
+}
+
+
+function showMarkers(para) {
   for(i = 0; i < markers.length; i++) {
-    markers[i].setVisible(false);
+    markers[i].setVisible(para);
   };
 }
 
@@ -350,7 +367,7 @@ function sokeFunk() {
   var sokeRes = [];
   var x;
   for(i = 0; i < toilets.length; i++) {
-    if(sokeParam == toilets[i].plassering) {
+    if(sokeParam == toilets[i].plassering.toUpperCase()) {
       sokeRes.push(toilets[i]);
       x = i;
       };
@@ -358,7 +375,7 @@ function sokeFunk() {
 
   if(sokeRes == 0) return;
 
-  hideMarkers();
+  showMarkers(false);
   markers[x].setVisible(true);
 
   var Parent = document.getElementById("toaliste");
@@ -372,5 +389,150 @@ function sokeFunk() {
     node.appendChild(textnode);
     document.getElementById("toaliste").appendChild(node);
   };
+}
 
+
+
+var treff;
+var adresser = [];
+function asokeFunk() {
+  var sokeParam = document.getElementById("sokinput").value;
+  adresser = Object.keys(toilets.adresse);
+  adresse = new RegExp(toilets[0].adresse|toilets[1].adresse|toilets[2].adresse|toilets[3].adresse|toilets[4].adresse|toilets[5].adresse|toilets[6].adresse|toilets[7].adresse|toilets[8].adresse|toilets[9].adresse|toilets[10].adresse|toilets[11].adresse|toilets[12].adresse|toilets[13].adresse);
+  treff = sokeParam.match(adresse);
+//  var searchParams = Object.keys(searchObject);
+  //for(i=0; i < toilets.length; i++) {
+    //var truthChecker = [] // will contain boolean values "true" for each param checked.
+    //for(y=0; y < searchParams.length; y++) {
+        //if(persons[i][searchParams[y]] == searchObject[searchParams[y]]) {
+          //  truthChecker.push(true);
+      //  }
+        //if(truthChecker.length == searchParams.length) { //if all params are true, person is pushed.
+          //  searchResults.push(persons[i]);
+      //  }
+  //  }
+//}
+
+}
+
+
+
+var now;
+
+function openNow() {
+ now = new Date();
+}
+
+
+
+var flag;
+
+function openSunday() {
+  if(flag == 1) {
+    refresh();
+    flag = 0;
+    return;
+  };
+
+  var sokeRes = [];
+  var x = [];
+  for(i = 0; i < toilets.length; i++) {
+    if(toilets[i].tid_sondag != "NULL") {
+      x.push(i);
+      sokeRes.push(toilets[i]);
+      };
+    };
+
+    showMarkers(false);
+    for(i = 0; i < x.length; i++) {
+      var y = x[i];
+      markers[y].setVisible(true);
+    };
+
+  var Parent = document.getElementById("toaliste");
+  while(Parent.hasChildNodes()) {
+     Parent.removeChild(Parent.firstChild);
+  };
+
+  for(i = 0; i < sokeRes.length; i++) {
+    var node = document.createElement("LI");
+    var textnode = document.createTextNode(sokeRes[i].num +". " + sokeRes[i].plassering);
+    node.appendChild(textnode);
+    document.getElementById("toaliste").appendChild(node);
+  };
+  flag = 1;
+}
+
+
+
+function harDame() {
+  if(flag == 1) {
+    refresh();
+    flag = 0;
+    return;
+  };
+
+  var sokeRes = [];
+  var x = [];
+  for(i = 0; i < toilets.length; i++) {
+    if(toilets[i].dame != "NULL") {
+      x.push(i);
+      sokeRes.push(toilets[i]);
+      };
+    };
+
+    showMarkers(false);
+    for(i = 0; i < x.length; i++) {
+      var y = x[i];
+      markers[y].setVisible(true);
+    };
+
+  var Parent = document.getElementById("toaliste");
+  while(Parent.hasChildNodes()) {
+     Parent.removeChild(Parent.firstChild);
+  };
+
+  for(i = 0; i < sokeRes.length; i++) {
+    var node = document.createElement("LI");
+    var textnode = document.createTextNode(sokeRes[i].num +". " + sokeRes[i].plassering);
+    node.appendChild(textnode);
+    document.getElementById("toaliste").appendChild(node);
+  };
+  flag = 1;
+}
+
+function harStell() {
+  if(flag == 1) {
+    refresh();
+    flag = 0;
+    return;
+  };
+
+  var sokeRes = [];
+  var x = [];
+  for(i = 0; i < toilets.length; i++) {
+    if(toilets[i].stellerom != "NULL") {
+      x.push(i);
+      sokeRes.push(toilets[i]);
+      };
+    };
+
+    showMarkers(false);
+    for(i = 0; i < x.length; i++) {
+      var y = x[i];
+      markers[y].setVisible(true);
+    };
+
+  var Parent = document.getElementById("toaliste");
+  while(Parent.hasChildNodes()) {
+     Parent.removeChild(Parent.firstChild);
+  };
+
+  for(i = 0; i < sokeRes.length; i++) {
+    var node = document.createElement("LI");
+    var textnode = document.createTextNode(sokeRes[i].num +". " + sokeRes[i].plassering);
+    node.appendChild(textnode);
+    document.getElementById("toaliste").appendChild(node);
+  };
+  flag = 1;
 }
