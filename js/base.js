@@ -1,4 +1,6 @@
-var markers = []
+var markers = [];
+var sokeRes = [];
+var flag = 0;
 
 function initMap() {
   var nonnesoer = {lat: 60.3879681, lng: 5.334608};
@@ -352,12 +354,32 @@ function refresh() {
 }
 
 
+function printRes(res) {
+  for(i = 0; i < res.length; i++) {
+    var node = document.createElement("LI");
+    var textnode = document.createTextNode(res[i].num +". " + res[i].plassering);
+    node.appendChild(textnode);
+    document.getElementById("toaliste").appendChild(node);
+  };
+}
+
+
 function showMarkers(para) {
   for(i = 0; i < markers.length; i++) {
     markers[i].setVisible(para);
   };
 }
 
+
+
+function flagCheck() {
+  if(flag == 1) {
+    refresh();
+    flag = 0;
+    return true;
+  };
+
+}
 
 
 function sokeFunk() {
@@ -383,12 +405,7 @@ function sokeFunk() {
      Parent.removeChild(Parent.firstChild);
   };
 
-  for(i = 0; i < sokeRes.length; i++) {
-    var node = document.createElement("LI");
-    var textnode = document.createTextNode(sokeRes[i].num +". " + sokeRes[i].plassering);
-    node.appendChild(textnode);
-    document.getElementById("toaliste").appendChild(node);
-  };
+  printRes(sokeRes);
 }
 
 
@@ -425,14 +442,10 @@ function openNow() {
 
 
 
-var flag;
+
 
 function openSunday() {
-  if(flag == 1) {
-    refresh();
-    flag = 0;
-    return;
-  };
+  if(flagCheck() == true) return;
 
   var sokeRes = [];
   var x = [];
@@ -454,23 +467,14 @@ function openSunday() {
      Parent.removeChild(Parent.firstChild);
   };
 
-  for(i = 0; i < sokeRes.length; i++) {
-    var node = document.createElement("LI");
-    var textnode = document.createTextNode(sokeRes[i].num +". " + sokeRes[i].plassering);
-    node.appendChild(textnode);
-    document.getElementById("toaliste").appendChild(node);
-  };
+  printRes(sokeRes);
   flag = 1;
 }
 
 
 
 function harDame() {
-  if(flag == 1) {
-    refresh();
-    flag = 0;
-    return;
-  };
+  if(flagCheck() == true) return;
 
   var sokeRes = [];
   var x = [];
@@ -492,21 +496,12 @@ function harDame() {
      Parent.removeChild(Parent.firstChild);
   };
 
-  for(i = 0; i < sokeRes.length; i++) {
-    var node = document.createElement("LI");
-    var textnode = document.createTextNode(sokeRes[i].num +". " + sokeRes[i].plassering);
-    node.appendChild(textnode);
-    document.getElementById("toaliste").appendChild(node);
-  };
+  printRes(sokeRes);
   flag = 1;
 }
 
 function harStell() {
-  if(flag == 1) {
-    refresh();
-    flag = 0;
-    return;
-  };
+  if(flagCheck() == true) return;
 
   var sokeRes = [];
   var x = [];
@@ -528,11 +523,6 @@ function harStell() {
      Parent.removeChild(Parent.firstChild);
   };
 
-  for(i = 0; i < sokeRes.length; i++) {
-    var node = document.createElement("LI");
-    var textnode = document.createTextNode(sokeRes[i].num +". " + sokeRes[i].plassering);
-    node.appendChild(textnode);
-    document.getElementById("toaliste").appendChild(node);
-  };
+  printRes(sokeRes);
   flag = 1;
 }
