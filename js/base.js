@@ -336,10 +336,10 @@ function initMap() {
 
 }
 
-function hentToa() {
+function hentUrl(url) {
     return new Promise(function(resolve, reject) {
 	var xhr = new XMLHttpRequest();
-	xhr.open("GET", "https://hotell.difi.no/api/json/bergen/dokart?");
+	xhr.open("GET", url);
 	xhr.onreadystatechange = function() {
 	    if (xhr.readyState === 4) {
 		if (xhr.status === 200) {
@@ -357,7 +357,7 @@ var toilets;
 function initList() {
 
 
-  hentToa().then(function (result) {
+  hentUrl("https://hotell.difi.no/api/json/bergen/dokart?").then(function (result) {
     toilets = JSON.parse(result);
     for(i = 0; i < toilets.entries.length; i++) {
       var node = document.createElement("LI");
