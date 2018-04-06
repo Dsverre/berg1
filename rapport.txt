@@ -1,3 +1,4 @@
+
 Dag Are Relling og Sverre Voje Blindheim
 
 Link til side : http://wildboy.uib.no/~sbl082/
@@ -7,8 +8,18 @@ til bruk av oppdatering og forklaring av hva vi har gjort. Vi har delt inn arbei
 på en grei måte og har denne gang jobbet litt mer "sammen" med de samme tingene.
 Dette for at da kan begge lære seg hele oppgaven, og ikke bare deler av den.
 
-Eksempelvis:
-hvordan og hvorfor fungerer algoritmen deres som itererer gjennom JSON-dataen? Forklar
-logikken bak deres løsning stegvis og på en forståelig måte.
+Arbeidet med "søkemotoren" har av diverse grunner dessverre blitt litt nedprioritert, og av den grunn har vi ikke klart å løse oppgaven fullstendig.
 
-kan du skrive litt meir om dette? :----D
+Første mål for søkemotoren ble å legge til rette for et enkelt tekstsøk, hvor søkeordet måtte være identisk med en valgt parameter.
+Vi endte opp med å ta .plassering som parameteren som måtte være identisk, og vi brukte derfor kun en for-loop som itererte gjennom alle toalettene sin .plassering og la dem til i et array om .plassering matchet med søkeparameteret hentet fra en tekst input boks.
+
+Da dette var i orden, så ble fokuset på å representere dette treffet både gjennom manipulering av listen av toaletter og av markørene som designerte de forskjellige toalettene.
+
+Da en manglende forståelse av RegExp gjorde det vanskelig å utføre de mer avanserte søkene, så ble en alternativ utførelse valgt.
+Måten som ble valgt var å lage metoder for hver av parametrene som det var ønsket i et avansert søk - ikke alle har blitt lagt til her - og så gjøre disse metodene tilgjengelige via checkboxer i et <details>-element.
+Det ble også her lagt til en knapp, som ble knyttet opp til et mer avansert søk, men dette søket er ikke ferdig.
+
+Det som altså virker er muligheten til å vise som både liste og markørfjerning hvilke toaletter som alene oppfyller diverse krav.
+Det er lagd tanker om hvordan disse checkboxene kan være kumulative gjennom en global sokeRes variabel som holdes oppdatert med hvilke parametere som bes søkes etter, men dette er ikke gjennomført pga tekniske utfordringer.
+
+Vi har dog ganske klare tanker om hvordan disse manglene skal bøtes på, men er litt interessert i tilbakemelding angående vår alternative løsning til avansert søk, nemlig med å flytte endel av kriteriene over til checkboxer isteder for å ha et skjema.
