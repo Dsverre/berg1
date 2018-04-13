@@ -415,7 +415,7 @@ var adresser = [];
 function asokeFunk() {
   var sokeParam = document.getElementById("sokinput").value;
   adresser = Object.keys(toilets.adresse);
-  adresse = new RegExp(toilets[0].adresse|toilets[1].adresse|toilets[2].adresse|toilets[3].adresse|toilets[4].adresse|toilets[5].adresse|toilets[6].adresse|toilets[7].adresse|toilets[8].adresse|toilets[9].adresse|toilets[10].adresse|toilets[11].adresse|toilets[12].adresse|toilets[13].adresse);
+  adresser = new RegExp(toilets[0].adresse|toilets[1].adresse|toilets[2].adresse|toilets[3].adresse|toilets[4].adresse|toilets[5].adresse|toilets[6].adresse|toilets[7].adresse|toilets[8].adresse|toilets[9].adresse|toilets[10].adresse|toilets[11].adresse|toilets[12].adresse|toilets[13].adresse);
   treff = sokeParam.match(adresse);
 //  var searchParams = Object.keys(searchObject);
   //for(i=0; i < toilets.length; i++) {
