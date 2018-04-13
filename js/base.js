@@ -336,28 +336,54 @@ function initMap() {
 
 }
 
-function refresh() {
-
-    var Parent = document.getElementById("toaliste");
-    while(Parent.hasChildNodes()) {
-       Parent.removeChild(Parent.firstChild);
-    };
-
-  for(i = 0; i < toilets.length; i++) {
-    var node = document.createElement("LI");
-    var textnode = document.createTextNode(toilets[i].num +". " + toilets[i].plassering);
-    node.appendChild(textnode);
-    document.getElementById("toaliste").appendChild(node);
-  };
-  showMarkers(true);
-  flag = 0;
+function hentUrl(url) {
+    return new Promise(function(resolve, reject) {
+	var xhr = new XMLHttpRequest();
+	xhr.open("GET", url);
+	xhr.onreadystatechange = function() {
+	    if (xhr.readyState === 4) {
+		if (xhr.status === 200) {
+		    resolve(xhr.response);
+		} else {
+		    reject(xhr.statusText);
+		}
+	    }
+	};
+	xhr.send();
+    });
 }
 
+var toilets;
+function initList() {
+
+
+  hentUrl("https://hotell.difi.no/api/json/bergen/dokart?").then(function (result) {
+    toilets = JSON.parse(result);
+    for(i = 0; i < toilets.entries.length; i++) {
+      var node = document.createElement("LI");
+      var textnode = document.createTextNode(i+1 + ": " + toilets.entries[i].plassering);
+      node.appendChild(textnode);
+      document.getElementById("toaliste").appendChild(node);
+    }
+    showMarkers(true);
+    flag = 0;
+
+  });
+}
+
+
+
+
+function refresh() {
+  while(document.getElementById("toaliste").hasChildNodes()) {
+     document.getElementById("toaliste").removeChild(document.getElementById("toaliste").firstChild);
+  };
+}
 
 function printRes(res) {
   for(i = 0; i < res.length; i++) {
     var node = document.createElement("LI");
-    var textnode = document.createTextNode(res[i].num +". " + res[i].plassering);
+    var textnode = document.createTextNode(i+1 + ": " + res[i].plassering);
     node.appendChild(textnode);
     document.getElementById("toaliste").appendChild(node);
   };
@@ -375,6 +401,7 @@ function showMarkers(para) {
 function flagCheck() {
   if(flag == 1) {
     refresh();
+    initList();
     flag = 0;
     return true;
   };
@@ -400,11 +427,7 @@ function sokeFunk() {
   showMarkers(false);
   markers[x].setVisible(true);
 
-  var Parent = document.getElementById("toaliste");
-  while(Parent.hasChildNodes()) {
-     Parent.removeChild(Parent.firstChild);
-  };
-
+  refresh();
   printRes(sokeRes);
 }
 
@@ -449,24 +472,19 @@ function openSunday() {
 
   var sokeRes = [];
   var x = [];
-  for(i = 0; i < toilets.length; i++) {
-    if(toilets[i].tid_sondag != "NULL") {
+  for(i = 0; i < toilets.entries.length; i++) {
+    if(toilets.entries[i].tid_sondag != "NULL") {
       x.push(i);
-      sokeRes.push(toilets[i]);
+      sokeRes.push(toilets.entries[i]);
       };
     };
 
     showMarkers(false);
     for(i = 0; i < x.length; i++) {
-      var y = x[i];
-      markers[y].setVisible(true);
+      markers[x[i]].setVisible(true);
     };
 
-  var Parent = document.getElementById("toaliste");
-  while(Parent.hasChildNodes()) {
-     Parent.removeChild(Parent.firstChild);
-  };
-
+  refresh();
   printRes(sokeRes);
   flag = 1;
 }
@@ -478,24 +496,19 @@ function harDame() {
 
   var sokeRes = [];
   var x = [];
-  for(i = 0; i < toilets.length; i++) {
-    if(toilets[i].dame != "NULL") {
+  for(i = 0; i < toilets.entries.length; i++) {
+    if(toilets.entries[i].dame != "NULL") {
       x.push(i);
-      sokeRes.push(toilets[i]);
+      sokeRes.push(toilets.entries[i]);
       };
     };
 
     showMarkers(false);
     for(i = 0; i < x.length; i++) {
-      var y = x[i];
-      markers[y].setVisible(true);
+      markers[x[i]].setVisible(true);
     };
 
-  var Parent = document.getElementById("toaliste");
-  while(Parent.hasChildNodes()) {
-     Parent.removeChild(Parent.firstChild);
-  };
-
+  refresh();
   printRes(sokeRes);
   flag = 1;
 }
@@ -505,24 +518,19 @@ function harStell() {
 
   var sokeRes = [];
   var x = [];
-  for(i = 0; i < toilets.length; i++) {
-    if(toilets[i].stellerom != "NULL") {
+  for(i = 0; i < toilets.entries.length; i++) {
+    if(toilets.entries[i].stellerom != "NULL") {
       x.push(i);
-      sokeRes.push(toilets[i]);
+      sokeRes.push(toilets.entries[i]);
       };
     };
 
     showMarkers(false);
     for(i = 0; i < x.length; i++) {
-      var y = x[i];
-      markers[y].setVisible(true);
+      markers[x[i]].setVisible(true);
     };
 
-  var Parent = document.getElementById("toaliste");
-  while(Parent.hasChildNodes()) {
-     Parent.removeChild(Parent.firstChild);
-  };
-
+  refresh();
   printRes(sokeRes);
   flag = 1;
 }
