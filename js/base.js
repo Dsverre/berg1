@@ -380,7 +380,7 @@ function flagCheck() {
   };
 
 }
-
+//IndexOf + Include (js-funksjoner til å matche treff)
 
 function sokeFunk() {
   if(document.getElementById("sokinput").value == "") return;
