@@ -10,13 +10,12 @@ window.onload = function() {
 }
 
 
-var nonnesoer = {lat: 60.3879681, lng: 5.334608};
 function initMap() {
 
 
   map = new google.maps.Map(document.getElementById('map'), {
     zoom: 13,
-    center: nonnesoer
+    center: {lat: 60.3879681, lng: 5.334608}
   });
 
 }
@@ -93,6 +92,7 @@ function markAuto() {
           infoWindow.setContent(this.content);
           infoWindow.open(map, this);
         });
+      markers.push(marker);
     };
 }
 
