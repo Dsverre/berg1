@@ -3,10 +3,12 @@ var sokeRes = [];
 var flag = 0;
 var toa = 0;
 var toilets;
+var lekeplass;
 var map;
 
 window.onload = function() {
-  initList();
+  initToa();
+  initLeke();
 }
 
 
@@ -38,7 +40,7 @@ function hentUrl(url) {
 }
 
 
-function initList() {
+function initToa() {
 
 
   hentUrl("https://hotell.difi.no/api/json/bergen/dokart?").then(function (result) {
@@ -51,6 +53,22 @@ function initList() {
     }
     flag = 0;
     markAuto();
+
+  });
+}
+
+
+function initLeke() {
+
+  hentUrl("https://hotell.difi.no/api/json/bergen/lekeplasser?").then(function (result) {
+    lekeplass = JSON.parse(result);
+    for(i = 0; i < lekeplass.entries.length; i++) {
+      var node = document.createElement("LI");
+      var textnode = document.createTextNode(i+1 + ": " + lekeplass.entries[i].navn);
+      node.appendChild(textnode);
+      document.getElementById("lekeliste").appendChild(node);
+    }
+    flag = 0;
 
   });
 }
@@ -127,7 +145,7 @@ function showMarkers(para) {
 function flagCheck() {
   if(flag == 1) {
     refresh();
-    initList();
+    initToa();
     flag = 0;
     return true;
   };
