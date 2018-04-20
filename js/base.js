@@ -4,12 +4,20 @@ var flag = 0;
 var toa = 0;
 var dataset;
 var map;
+var syntax;
 
 window.onload = function() {
   var currentUrl = window.location.href;
   var page = currentUrl.split("/")[currentUrl.split("/").length-1];
-  if(page == "toaletter.html") initList("https://hotell.difi.no/api/json/bergen/dokart?", "plassering");
-  else if(page == "lekeplasser.html") initList("https://hotell.difi.no/api/json/bergen/lekeplasser?", "navn");
+  if(page == "toaletter.html") {
+    initList("https://hotell.difi.no/api/json/bergen/dokart?");
+    syntax = "plassering";
+  }
+  else if(page == "lekeplasser.html") {
+     initList("https://hotell.difi.no/api/json/bergen/lekeplasser?");
+     syntax = "navn"
+  }
+
 }
 
 
@@ -41,7 +49,7 @@ function hentUrl(url) {
 }
 
 
-function initList(url, syntax) {
+function initList(url) {
 
 
   hentUrl(url).then(function (result) {
@@ -55,7 +63,7 @@ function initList(url, syntax) {
       document.getElementById("liste").appendChild(node);
     }
     flag = 0;
-    markAuto(syntax);
+    markAuto();
 
   });
 }
@@ -75,16 +83,16 @@ function markAuto() {
 
       var firstHeading = document.createElement("h1");
       firstHeading.setAttribute("id", "firstHeading");
-      if(arguments[0] == "navn") var holder1 = dataset.entries[i].navn;
-      else if(arguments[0] == "plassering") var holder1 = dataset.entries[i].plassering;
+      if(syntax == "navn") var holder1 = dataset.entries[i].navn;
+      else if(syntax == "plassering") var holder1 = dataset.entries[i].plassering;
       var headingText = document.createTextNode((i+1) + ". " + holder1);
       firstHeading.appendChild(headingText);
       content.appendChild(firstHeading);
 
       var bodyContent = document.createElement("div");
       bodyContent.setAttribute("class", "bodyContent");
-      if(arguments[0] == "navn") var holder2 = "";
-      else if(arguments[0] == "plassering") var holder2 = dataset.entries[i].adresse;
+      if(syntax == "navn") var holder2 = "";
+      else if(syntax == "plassering") var holder2 = dataset.entries[i].adresse;
       var paraText = document.createTextNode(holder2);
       bodyContent.appendChild(paraText);
       content.appendChild(bodyContent);
@@ -108,15 +116,17 @@ function markAuto() {
 
 
 function refresh() {
-  while(document.getElementById("toaliste").hasChildNodes()) {
-     document.getElementById("toaliste").removeChild(document.getElementById("liste").firstChild);
+  while(document.getElementById("liste").hasChildNodes()) {
+     document.getElementById("liste").removeChild(document.getElementById("liste").firstChild);
   };
 }
 
 function printRes(res) {
   for(i = 0; i < res.length; i++) {
     var node = document.createElement("LI");
-    var textnode = document.createTextNode(i+1 + ": " + res[i].plassering);
+    if(syntax == "navn") var holder = res[i].navn;
+    else if(syntax == "plassering") var holder = res[i].plassering;
+    var textnode = document.createTextNode(i+1 + ": " + holder);
     node.appendChild(textnode);
     document.getElementById("liste").appendChild(node);
   };
@@ -134,7 +144,7 @@ function showMarkers(para) {
 function flagCheck() {
   if(flag == 1) {
     refresh();
-    initToa();
+    initList();
     flag = 0;
     return true;
   };
@@ -146,19 +156,20 @@ function sokeFunk() {
   if(document.getElementById("sokinput").value == "") return;
 
   var sokeParam = document.getElementById("sokinput").value.toUpperCase();
-  var sokeRes = [];
-  var x;
-  for(i = 0; i < dataset.length; i++) {
-    if(sokeParam == dataset[i].plassering.toUpperCase()) {
-      sokeRes.push(dataset[i]);
-      x = i;
+  var tempMarkers = [];
+  for(i = 0; i < dataset.entries.length; i++) {
+    if(dataset.entries[i].navn.toUpperCase().includes(sokeParam)) {
+      sokeRes.push(dataset.entries[i]);
+      tempMarkers.push(markers[i])
       };
     }
 
   if(sokeRes == 0) return;
 
   showMarkers(false);
-  markers[x].setVisible(true);
+  for(i = 0; i < tempMarkers.length; i++) {
+    tempMarkers[i].setVisible(true);
+  };
 
   refresh();
   printRes(sokeRes);
