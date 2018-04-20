@@ -1,13 +1,21 @@
-- Skrive sokeFunk(), slik at den lagrer søkeparameterne i et objekt, for så å sammenligne dette objektet med objekter i toilets[].
-  Lagre denne sammenligningen i et array, for så å sjekke om det var et treff.
-  - Oppdater så #toliste til å reflektere disse treffene.
+Fullføre sokeFunk()
+  - Beskrive søkeobjektet som skal holde parameteret globalt?
+  - Bruk RegExp for å analysere sokeParam og eventuelt inndele delene av søkeinputet og bruke dem til å definere søkeobjektet. Omfattende.
+  - Gjøre det nåværende søket datasettuavhengig.
 
-- Lage en avansert søkeside.
-    - Enten kopiere toaletter.html, men bytte ut tekstinput med korresponderende rullegardinmenyer etc.
-    - Kode inn en blokk som er skjult frem til det trykkes en knapp for å vise utvidet søk.
+Optimalisere stylinga
+  - Sluttføre inndeling av de 4 grenseverdiene som definerer stylinga, slik at de utfører 4 helhetlige og passende layout.
+  - Eventuell designoptimalisering?
+  - Bytte navnet fra alternativ...
+  - Optimalisere lekeplassser.html.
+  - Ta stilling til detaljer-løsninga.
 
-- Lage markers for hvert objekt i toilets[]. FERDIG
-  Optimalisere søketreffrepresentasjonen (valgfritt)
-  Lage infovindu (valgfritt) - FERDIG? tok med adresse
+Den tredje siden
+- Opprette den.
+- Style den.
+- Skrive funksjoner for å utføre oppgaveteksten.
 
-- Se kommentar. (Hardcode inn tall i dokart.json) - FERDIG
+De booleanske søkefunksjonene
+ - Sluttføre dem?
+ - Ta stilling til flagCheck() problematikken.
+ - Fjerne dem?
