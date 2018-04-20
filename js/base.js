@@ -2,15 +2,14 @@ var markers = [];
 var sokeRes = [];
 var flag = 0;
 var toa = 0;
-var toilets;
-var lekeplass;
+var dataset;
 var map;
 
 window.onload = function() {
   var currentUrl = window.location.href;
   var page = currentUrl.split("/")[currentUrl.split("/").length-1];
-  if(page == "toaletter.html") initToa();
-  else if(page == "lekeplasser.html") initLeke();
+  if(page == "toaletter.html") initList("https://hotell.difi.no/api/json/bergen/dokart?", "plassering");
+  else if(page == "lekeplasser.html") initList("https://hotell.difi.no/api/json/bergen/lekeplasser?", "navn");
 }
 
 
@@ -42,44 +41,30 @@ function hentUrl(url) {
 }
 
 
-function initToa() {
+function initList(url, syntax) {
 
 
-  hentUrl("https://hotell.difi.no/api/json/bergen/dokart?").then(function (result) {
-    toilets = JSON.parse(result);
-    for(i = 0; i < toilets.entries.length; i++) {
+  hentUrl(url).then(function (result) {
+    dataset = JSON.parse(result);
+    for(i = 0; i < dataset.entries.length; i++) {
+      if(syntax == "navn") var holder = dataset.entries[i].navn;
+      else if(syntax == "plassering") var holder = dataset.entries[i].plassering;
       var node = document.createElement("LI");
-      var textnode = document.createTextNode(i+1 + ": " + toilets.entries[i].plassering);
+      var textnode = document.createTextNode(i+1 + ": " + holder);
       node.appendChild(textnode);
-      document.getElementById("toaliste").appendChild(node);
+      document.getElementById("liste").appendChild(node);
     }
     flag = 0;
-    markToa();
+    markAuto(syntax);
 
   });
 }
 
 
-function initLeke() {
-
-  hentUrl("https://hotell.difi.no/api/json/bergen/lekeplasser?").then(function (result) {
-    lekeplass = JSON.parse(result);
-    for(i = 0; i < lekeplass.entries.length; i++) {
-      var node = document.createElement("LI");
-      var textnode = document.createTextNode(i+1 + ": " + lekeplass.entries[i].navn);
-      node.appendChild(textnode);
-      document.getElementById("lekeliste").appendChild(node);
-    }
-    flag = 0;
-    markLeke();
-
-  });
-}
-
-function markToa() {
+function markAuto() {
 
 
-    for(i = 0; i < toilets.entries.length; i++) {
+    for(i = 0; i < dataset.entries.length; i++) {
       var content = document.createElement("div");
       content.setAttribute("class", "content");
 
@@ -90,18 +75,22 @@ function markToa() {
 
       var firstHeading = document.createElement("h1");
       firstHeading.setAttribute("id", "firstHeading");
-      var headingText = document.createTextNode(toilets.entries[i].id + ". " + toilets.entries[i].plassering);
+      if(arguments[0] == "navn") var holder1 = dataset.entries[i].navn;
+      else if(arguments[0] == "plassering") var holder1 = dataset.entries[i].plassering;
+      var headingText = document.createTextNode((i+1) + ". " + holder1);
       firstHeading.appendChild(headingText);
       content.appendChild(firstHeading);
 
       var bodyContent = document.createElement("div");
       bodyContent.setAttribute("class", "bodyContent");
-      var paraText = document.createTextNode(toilets.entries[i].adresse);
+      if(arguments[0] == "navn") var holder2 = "";
+      else if(arguments[0] == "plassering") var holder2 = dataset.entries[i].adresse;
+      var paraText = document.createTextNode(holder2);
       bodyContent.appendChild(paraText);
       content.appendChild(bodyContent);
 
       var infoWindow = new google.maps.InfoWindow();
-      var tempPos = {lat: parseFloat(toilets.entries[i].latitude), lng: parseFloat(toilets.entries[i].longitude)};
+      var tempPos = {lat: parseFloat(dataset.entries[i].latitude), lng: parseFloat(dataset.entries[i].longitude)};
       var marker = new google.maps.Marker({
         position: tempPos,
         map: map,
@@ -116,51 +105,11 @@ function markToa() {
       markers.push(marker);
     };
 }
-
-
-
-function markLeke() {
-
-
-    for(i = 0; i < lekeplass.entries.length; i++) {
-      var content = document.createElement("div");
-      content.setAttribute("class", "content");
-
-      var sideNotice = document.createElement("div");
-      sideNotice.setAttribute("class", "sideNotice");
-
-      content.appendChild(sideNotice);
-
-      var firstHeading = document.createElement("h1");
-      firstHeading.setAttribute("id", "firstHeading");
-      var headingText = document.createTextNode((i+1) + ". " + lekeplass.entries[i].navn);
-      firstHeading.appendChild(headingText);
-      content.appendChild(firstHeading);
-
-      var infoWindow = new google.maps.InfoWindow();
-      var tempPos = {lat: parseFloat(lekeplass.entries[i].latitude), lng: parseFloat(lekeplass.entries[i].longitude)};
-      var marker = new google.maps.Marker({
-        position: tempPos,
-        map: map,
-        content: content,
-        label: (i+1).toString()
-      });
-
-      marker.addListener('click', function() {
-          infoWindow.setContent(this.content);
-          infoWindow.open(map, this);
-        });
-      markers.push(marker);
-    };
-}
-
-
-
 
 
 function refresh() {
   while(document.getElementById("toaliste").hasChildNodes()) {
-     document.getElementById("toaliste").removeChild(document.getElementById("toaliste").firstChild);
+     document.getElementById("toaliste").removeChild(document.getElementById("liste").firstChild);
   };
 }
 
@@ -169,7 +118,7 @@ function printRes(res) {
     var node = document.createElement("LI");
     var textnode = document.createTextNode(i+1 + ": " + res[i].plassering);
     node.appendChild(textnode);
-    document.getElementById("toaliste").appendChild(node);
+    document.getElementById("liste").appendChild(node);
   };
 }
 
@@ -199,9 +148,9 @@ function sokeFunk() {
   var sokeParam = document.getElementById("sokinput").value.toUpperCase();
   var sokeRes = [];
   var x;
-  for(i = 0; i < toilets.length; i++) {
-    if(sokeParam == toilets[i].plassering.toUpperCase()) {
-      sokeRes.push(toilets[i]);
+  for(i = 0; i < dataset.length; i++) {
+    if(sokeParam == dataset[i].plassering.toUpperCase()) {
+      sokeRes.push(dataset[i]);
       x = i;
       };
     }
@@ -221,11 +170,11 @@ var treff;
 var adresser = [];
 function asokeFunk() {
   var sokeParam = document.getElementById("sokinput").value;
-  adresser = Object.keys(toilets.adresse);
-  adresser = new RegExp(toilets[0].adresse|toilets[1].adresse|toilets[2].adresse|toilets[3].adresse|toilets[4].adresse|toilets[5].adresse|toilets[6].adresse|toilets[7].adresse|toilets[8].adresse|toilets[9].adresse|toilets[10].adresse|toilets[11].adresse|toilets[12].adresse|toilets[13].adresse);
+  adresser = Object.keys(dataset.adresse);
+  adresser = new RegExp(dataset[0].adresse|dataset[1].adresse|dataset[2].adresse|dataset[3].adresse|dataset[4].adresse|dataset[5].adresse|dataset[6].adresse|dataset[7].adresse|dataset[8].adresse|dataset[9].adresse|dataset[10].adresse|dataset[11].adresse|dataset[12].adresse|dataset[13].adresse);
   treff = sokeParam.match(adresse);
 //  var searchParams = Object.keys(searchObject);
-  //for(i=0; i < toilets.length; i++) {
+  //for(i=0; i < dataset.length; i++) {
     //var truthChecker = [] // will contain boolean values "true" for each param checked.
     //for(y=0; y < searchParams.length; y++) {
         //if(persons[i][searchParams[y]] == searchObject[searchParams[y]]) {
@@ -256,10 +205,10 @@ function openSunday() {
 
   var sokeRes = [];
   var x = [];
-  for(i = 0; i < toilets.entries.length; i++) {
-    if(toilets.entries[i].tid_sondag != "NULL") {
+  for(i = 0; i < dataset.entries.length; i++) {
+    if(dataset.entries[i].tid_sondag != "NULL") {
       x.push(i);
-      sokeRes.push(toilets.entries[i]);
+      sokeRes.push(dataset.entries[i]);
       };
     };
 
@@ -280,10 +229,10 @@ function harDame() {
 
   var sokeRes = [];
   var x = [];
-  for(i = 0; i < toilets.entries.length; i++) {
-    if(toilets.entries[i].dame != "NULL") {
+  for(i = 0; i < dataset.entries.length; i++) {
+    if(dataset.entries[i].dame != "NULL") {
       x.push(i);
-      sokeRes.push(toilets.entries[i]);
+      sokeRes.push(dataset.entries[i]);
       };
     };
 
@@ -302,10 +251,10 @@ function harStell() {
 
   var sokeRes = [];
   var x = [];
-  for(i = 0; i < toilets.entries.length; i++) {
-    if(toilets.entries[i].stellerom != "NULL") {
+  for(i = 0; i < dataset.entries.length; i++) {
+    if(dataset.entries[i].stellerom != "NULL") {
       x.push(i);
-      sokeRes.push(toilets.entries[i]);
+      sokeRes.push(dataset.entries[i]);
       };
     };
 
