@@ -52,7 +52,7 @@ function initToa() {
       document.getElementById("toaliste").appendChild(node);
     }
     flag = 0;
-    markAuto();
+    markToa();
 
   });
 }
@@ -69,11 +69,12 @@ function initLeke() {
       document.getElementById("lekeliste").appendChild(node);
     }
     flag = 0;
+    markLeke();
 
   });
 }
 
-function markAuto() {
+function markToa() {
 
 
     for(i = 0; i < toilets.entries.length; i++) {
@@ -99,6 +100,43 @@ function markAuto() {
 
       var infoWindow = new google.maps.InfoWindow();
       var tempPos = {lat: parseFloat(toilets.entries[i].latitude), lng: parseFloat(toilets.entries[i].longitude)};
+      var marker = new google.maps.Marker({
+        position: tempPos,
+        map: map,
+        content: content,
+        label: (i+1).toString()
+      });
+
+      marker.addListener('click', function() {
+          infoWindow.setContent(this.content);
+          infoWindow.open(map, this);
+        });
+      markers.push(marker);
+    };
+}
+
+
+
+function markLeke() {
+
+
+    for(i = 0; i < lekeplass.entries.length; i++) {
+      var content = document.createElement("div");
+      content.setAttribute("class", "content");
+
+      var sideNotice = document.createElement("div");
+      sideNotice.setAttribute("class", "sideNotice");
+
+      content.appendChild(sideNotice);
+
+      var firstHeading = document.createElement("h1");
+      firstHeading.setAttribute("id", "firstHeading");
+      var headingText = document.createTextNode((i+1) + ". " + lekeplass.entries[i].navn);
+      firstHeading.appendChild(headingText);
+      content.appendChild(firstHeading);
+
+      var infoWindow = new google.maps.InfoWindow();
+      var tempPos = {lat: parseFloat(lekeplass.entries[i].latitude), lng: parseFloat(lekeplass.entries[i].longitude)};
       var marker = new google.maps.Marker({
         position: tempPos,
         map: map,
