@@ -70,7 +70,7 @@ function markAuto() {
 
       var firstHeading = document.createElement("h1");
       firstHeading.setAttribute("id", "firstHeading");
-      var headingText = document.createTextNode(toilets.entries[i].plassering);
+      var headingText = document.createTextNode(toilets.entries[i].id + ". " + toilets.entries[i].plassering);
       firstHeading.appendChild(headingText);
       content.appendChild(firstHeading);
 
@@ -80,19 +80,19 @@ function markAuto() {
       bodyContent.appendChild(paraText);
       content.appendChild(bodyContent);
 
-      var infowindow = new google.maps.InfoWindow({
-              content: content
-      });
-
+      var infoWindow = new google.maps.InfoWindow();
       var tempPos = {lat: parseFloat(toilets.entries[i].latitude), lng: parseFloat(toilets.entries[i].longitude)};
       var marker = new google.maps.Marker({
         position: tempPos,
-        map: map
+        map: map,
+        content: content,
+        label: (i+1).toString()
       });
 
       marker.addListener('click', function() {
-        infowindow.open(map, this);
-      });
+          infoWindow.setContent(this.content);
+          infoWindow.open(map, this);
+        });
     };
 }
 
