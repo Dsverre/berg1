@@ -7,8 +7,10 @@ var lekeplass;
 var map;
 
 window.onload = function() {
-  initToa();
-  initLeke();
+  var currentUrl = window.location.href;
+  var page = currentUrl.split("/")[currentUrl.split("/").length-1];
+  if(page == "toaletter.html") initToa();
+  else if(page == "lekeplasser.html") initLeke();
 }
 
 
