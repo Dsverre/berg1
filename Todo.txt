@@ -11,11 +11,15 @@ Optimalisere stylinga
   - Ta stilling til detaljer-løsninga.
 
 Den tredje siden
-- Opprette den.
-- Style den.
-- Skrive funksjoner for å utføre oppgaveteksten.
+  - Opprette den.
+  - Style den.
+  - Skrive funksjoner for å utføre oppgaveteksten.
 
 De booleanske søkefunksjonene
- - Sluttføre dem?
- - Ta stilling til flagCheck() problematikken.
- - Fjerne dem?
+  - Sluttføre dem?
+  - Ta stilling til flagCheck() problematikken.
+  - Fjerne dem?
+
+markAuto()
+  - Når et søk gjøres og markører som representerer treff skal vises, så har de "gammel" label.
+  - Skal funksjonen gjøres mer generell?
