@@ -72,7 +72,7 @@ function initList(url) {
     dataset = JSON.parse(result);
     for(i = 0; i < dataset.entries.length; i++) {
       if(syntax == "leke") var holder = dataset.entries[i].navn;
-      else if(syntax == "toaletter") var holder = dataset.entries[i].toaletter;
+      else if(syntax == "toaletter") var holder = dataset.entries[i].plassering;
       var node = document.createElement("LI");
       var textnode = document.createTextNode(i+1 + ": " + holder);
       node.appendChild(textnode);
