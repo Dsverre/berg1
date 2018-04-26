@@ -283,10 +283,14 @@ function openNow() {
   for(i = 0; i < dataset.entries.length; i++) {
     tid = [];
     tid = dataset.entries[i].tid_hverdag.split(/[\s,]+/);
-    if(parseFloat(now) >= tid[0] && parseFloat(now) <= tid[2]) {
+    if(dataset.entries[i].tid_hverdag == "ALL") {
       x.push(i);
       sokeRes.push(dataset.entries[i]);
-      };
+    }
+    else if(parseFloat(now) >= tid[0] && parseFloat(now) <= tid[2]) {
+      x.push(i);
+      sokeRes.push(dataset.entries[i]);
+      }
     };
 
     showMarkers(false);
