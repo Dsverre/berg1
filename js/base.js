@@ -16,7 +16,7 @@ window.onload = function() {
     initList("https://hotell.difi.no/api/json/bergen/dokart?");
     syntax = "toaletter";
   }
-  else if(page == "lekeplasser.html") {
+  else if(page == "lekeplasser.html" || page == "fav-leke.html") {
      initList("https://hotell.difi.no/api/json/bergen/lekeplasser?");
      syntax = "leke"
   }
@@ -59,8 +59,28 @@ function hentUrl(url) {
     });
 }
 
+
+
+// Funksjon for å printe et dataset til elementet #liste
+// Ble gjort global for å gi flagCheck() muligheten til å printe kun lista, og ikke måtte kjøre hele initList()
+// Inneholder en sjekk for å avgjøre kilde-syntax.
+// Tar et dataset med JSON objekter som parameter.
+function printSet(set) {
+  for(i = 0; i < dataset.entries.length; i++) {
+    if(syntax == "leke") var holder = set.entries[i].navn;
+    else if(syntax == "toaletter") var holder = set.entries[i].plassering;
+    var node = document.createElement("LI");
+    var textnode = document.createTextNode(i+1 + ": " + holder);
+    node.appendChild(textnode);
+    document.getElementById("liste").appendChild(node);
+  };
+}
+
+
+
+
 // Funksjonen som er ryggraden i hele skriptet.
-// Her hentes datasettet, #liste elementet fylles av objektene datasettet inneholder og en sjekk avgjør syntaxen til kilden(holder).
+// Her hentes datasettet, #liste elementet fylles av objektene datasettet inneholder via printSet().
 // Etter dette kjøres markAuto() for å initialisere markørene.
 //
 // For å få tak i selve datasettet, så må man gi det til den anonyme funksjonen(result).
@@ -70,14 +90,7 @@ function initList(url) {
 
   hentUrl(url).then(function (result) {
     dataset = JSON.parse(result);
-    for(i = 0; i < dataset.entries.length; i++) {
-      if(syntax == "leke") var holder = dataset.entries[i].navn;
-      else if(syntax == "toaletter") var holder = dataset.entries[i].plassering;
-      var node = document.createElement("LI");
-      var textnode = document.createTextNode(i+1 + ": " + holder);
-      node.appendChild(textnode);
-      document.getElementById("liste").appendChild(node);
-    }
+    printSet(dataset);
     markAuto();
 
   });
@@ -179,10 +192,15 @@ function showMarkers(para) {
 // Den er per nå et stykke unna full funksjonalitet.
 // De fleste funksjoner bør forholde seg til denne, og den bør også har kotroll over innholdet til mange variabler, om enn indirekte.
 // Enten det, eller så bør den erstattes med alternative løsninger eller lokale løsninger-
+//
+// V1.5 printing av dataset skjer vi egen funksjon.
+// Showmarker() brukes for å vise alle markørene.
+// Funker nå ganske bra som funksjon.
 function flagCheck() {
   if(flag == 1) {
     refresh();
-    initList();
+    printSet(dataset);
+    showMarkers(true);
     flag = 0;
     return true;
   };
@@ -253,8 +271,31 @@ function asokeFunk() {
 
 // Uferdig funksjon for å sjekke hvilke toaletter som er åpne nå.
 var now;
+var tid;
 function openNow() {
- now = new Date();
+  var time = new Date();
+  now = time.getHours() + "." + time.getMinutes();
+  if(flagCheck() == true) return;
+
+  sokeRes = [];
+  var x = [];
+
+  for(i = 0; i < dataset.entries.length; i++) {
+    tid = [];
+    tid = dataset.entries[i].tid_hverdag.split(/[\s,]+/);
+    if(parseFloat(now) >= tid[0] && parseFloat(now) <= tid[2]) {
+      x.push(i);
+      sokeRes.push(dataset.entries[i]);
+      };
+    };
+
+    showMarkers(false);
+    for(i = 0; i < x.length; i++) {
+      markers[x[i]].setVisible(true);
+    };
+    refresh();
+    printRes(sokeRes);
+    flag = 1;
 }
 
 //Funksjon for å vise representere hvilke objekter som er åpne på søndag.
@@ -263,7 +304,7 @@ function openNow() {
 function openSunday() {
   if(flagCheck() == true) return;
 
-  var sokeRes = [];
+  sokeRes = [];
   var x = [];
   for(i = 0; i < dataset.entries.length; i++) {
     if(dataset.entries[i].tid_sondag != "NULL") {
@@ -288,7 +329,7 @@ function openSunday() {
 function harDame() {
   if(flagCheck() == true) return;
 
-  var sokeRes = [];
+  sokeRes = [];
   var x = [];
   for(i = 0; i < dataset.entries.length; i++) {
     if(dataset.entries[i].dame != "NULL") {
@@ -312,7 +353,7 @@ function harDame() {
 function harStell() {
   if(flagCheck() == true) return;
 
-  var sokeRes = [];
+  sokeRes = [];
   var x = [];
   for(i = 0; i < dataset.entries.length; i++) {
     if(dataset.entries[i].stellerom != "NULL") {
