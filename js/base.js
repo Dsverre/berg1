@@ -149,6 +149,7 @@ function markAuto() {
     };
 }
 
+// kan fjerne alle markørene.
 
 
 // Funksjon for å tømme #liste-elementet. Føles smått overflødig eller i det minste meget uelegant.
@@ -377,10 +378,10 @@ function harStell() {
 }
 
 // Funksjon som regner ut avstanden fra talett nr 1. til nr 14.
-alert(getDistanceFromLatLonInKm(60.3879681,5.334608,60.3973581,5.3132629).toFixed(1));
+//window.alert(getDistanceFromLatLonInKm(60.3879681,5.334608,60.3973581,5.3132629).toFixed(1));
 function getDistanceFromLatLonInKm(lat1,lon1,lat2,lon2) {
 var R = 6371; // Radius av jorden i km
-var dLat = deg2rad(lat2-lat1);  // deg2rad under
+var dLat = deg2rad(lat2-lat1);
 var dLon = deg2rad(lon2-lon1);
 var a =
   Math.sin(dLat/2) * Math.sin(dLat/2) +
@@ -393,4 +394,41 @@ return d;
 }
 function deg2rad(deg) {
 return deg * (Math.PI/180); // svaret på utregningen.
+}
+
+// Funksjon som gjør lekeplass datasettet om til et DOM element.
+
+var content = document.createElement("div");
+content.setAttribute("class", "content");
+document.body.appendChild(content);
+document.createTextNode(content)
+var textnode = document.createTextNode(content)
+
+
+// eksempel:
+
+var div_element = document.getElementById("main");
+
+var h2_element = document.createElement("h2");
+var h2_text = document.createTextNode(leke[i].navn);
+h2_element.appendChild(h2_text);
+div_element.appendChild(h2_element);
+
+var p_element = document.createElement("p");
+var p_text = document.createTextNode(leke[i].latitude);
+p_element.appendChild(p_text);
+div_element.appendChild(p_element);
+
+var p_element = document.createElement("p");
+var p_text = document.createTextNode(leke[i].longitude);
+p_element.appendChild(p_text);
+div_element.appendChild(p_element);
+
+// markersfiks
+
+var markers = [];
+
+function addMarkers() {
+  for(let marker in markers)
+    markers.setMap(null);
 }
