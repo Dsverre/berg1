@@ -202,6 +202,7 @@ function flagCheck() {
     printSet(dataset);
     showMarkers(true);
     flag = 0;
+    sokeRes = []
     return true;
   };
 
@@ -258,13 +259,14 @@ function nysokeFunk() {
   if(searchObj.price != null) maksPris(searchObj.price);
   if(searchObj.gender == "1") harDame();
   if(searchObj.nursery == "1") harStell();
-  //if(searchObj.opennow == "1") openNow();
-  //if(searchObj.wheelchair == "1") hasWheelchair();
+  if(searchObj.opennow == "1") openNow();
+  if(searchObj.wheelchair == "1") hasWheelchair();
+  if(searchObj.open != null) openNow(searchObj.open);
+  flag = "1";
   if(Object.keys(searchObj).length == 1) return;
 
   refresh();
   printSet(sokeRes, "res");
-  flag = "1";
   //etc
 }
 
@@ -312,11 +314,59 @@ function openNow() {
   var time = new Date();
   now = time.getHours() + "." + time.getMinutes();
   if(flagCheck() == true) return;
+  if(sokeRes.length != "0") {
+    if(arguments.length != null) {
+    var tempRes = [];
+    for(i = 0; i < sokeRes.length; i++) {
+      tid = [];
+      tid = sokeRes[i].tid_hverdag.split(/[\s,]+/);
+      if(sokeRes[i].tid_hverdag == "ALL") {
+        //x.push(i);
+        tempRes.push(sokeRes[i]);
+      }
+      else if(parseFloat(now) >= tid[0] && parseFloat(now) <= tid[2]) {
+        //x.push(i);
+        tempRes.push(sokeRes[i]);
+        }
+      sokeRes = tempRes;
+      return sokeRes;
+      };
+    }
+    else {
+      var tempRes = [];
+      for(i = 0; i < sokeRes.length; i++) {
+      tid = [];
+      tid = sokeRes.tid_hverdag.split(/[\s,]+/);
+      if(sokeRes.tid_hverdag == "ALL") {
+        //x.push(i);
+        tempRes.push(sokeRes[i]);
+      }
+      else if(parseFloat(arguments[0]) >= tid[0] && parseFloat(arguments[0]) <= tid[2]) {
+        //x.push(i);
+        tempRes.push(sokeRes[i]);
+        }
+      };
+    }
 
+  }
   sokeRes = [];
   var x = [];
-
-  for(i = 0; i < dataset.entries.length; i++) {
+  if(arguments.length != null) {
+    for(i = 0; i < dataset.entries.length; i++) {
+      tid = [];
+      tid = dataset.entries[i].tid_hverdag.split(/[\s,]+/);
+      if(dataset.entries[i].tid_hverdag == "ALL") {
+        x.push(i);
+        sokeRes.push(dataset.entries[i]);
+      }
+      else if(parseFloat(arguments[0]) >= tid[0] && parseFloat(arguments[0]) <= tid[2]) {
+        x.push(i);
+        sokeRes.push(dataset.entries[i]);
+        }
+      };
+  }
+  else {
+    for(i = 0; i < dataset.entries.length; i++) {
     tid = [];
     tid = dataset.entries[i].tid_hverdag.split(/[\s,]+/);
     if(dataset.entries[i].tid_hverdag == "ALL") {
@@ -328,6 +378,7 @@ function openNow() {
       sokeRes.push(dataset.entries[i]);
       }
     };
+  }
 
     showMarkers(false);
     for(i = 0; i < x.length; i++) {
@@ -351,8 +402,8 @@ function openSunday() {
         };
       };
     sokeRes = tempRes;
+    return sokeRes;
   }
-  else {
   sokeRes = [];
   var x = [];
   for(i = 0; i < dataset.entries.length; i++) {
@@ -361,7 +412,6 @@ function openSunday() {
       sokeRes.push(dataset.entries[i]);
       };
     };
-  }
 
     if(Object.keys(searchObj).length > 1) return sokeRes;
 
@@ -426,17 +476,17 @@ function harStell() {
         };
       };
     sokeRes = tempRes;
+    return sokeRes;
   }
-  else {
     sokeRes = [];
     var x = [];
-    for(i = 0; i < dataset.entries.length; i++) {
-      if(dataset.entries[i].stellerom != "NULL") {
-        x.push(i);
-        sokeRes.push(dataset.entries[i]);
-        };
+  for(i = 0; i < dataset.entries.length; i++) {
+    if(dataset.entries[i].stellerom != "NULL") {
+      x.push(i);
+      sokeRes.push(dataset.entries[i]);
       };
-  }
+    };
+
 
     if(Object.keys(searchObj).length > 1) return sokeRes;
 
@@ -455,7 +505,16 @@ function harStell() {
 // Om man vil vise toaletter som er gratis føder man inn 0.
 function maksPris(pris) {
   if(flagCheck() == true) return;
-
+  if(sokeRes.length != "0") {
+    var tempRes = [];
+    for(i = 0; i < sokeRes.length; i++) {
+      if(parseFloat(sokeRes[i].pris) <= parseFloat(pris) | sokeRes[i].pris == "NULL") {
+        tempRes.push(sokeRes[i]);
+        };
+      };
+    sokeRes = tempRes;
+    return sokeRes;
+  }
   sokeRes = [];
   var x = [];
   for(i = 0; i < dataset.entries.length; i++) {
@@ -477,8 +536,17 @@ function maksPris(pris) {
 }
 
 function hasWheelchair() {
-  //  if(flagCheck() == true) return;
-
+  if(flagCheck() == true) return;
+  if(sokeRes.length != "0") {
+    var tempRes = [];
+    for(i = 0; i < sokeRes.length; i++) {
+      if(sokeRes[i].rullestol == "1") {
+        tempRes.push(sokeRes[i]);
+        };
+      };
+    sokeRes = tempRes;
+    return sokeRes;
+  }
     sokeRes = [];
     var x = [];
     for(i = 0; i < dataset.entries.length; i++) {
@@ -520,40 +588,40 @@ return deg * (Math.PI/180); // svaret på utregningen.
 
 // Funksjon som gjør lekeplass datasettet om til et DOM element.
 
-//var content = document.createElement("div");
-//content.setAttribute("class", "content");
-//document.body.appendChild(content);
-//document.createTextNode(content)
-//var textnode = document.createTextNode(content)
+// var content = document.createElement("div");
+// content.setAttribute("class", "content");
+// document.body.appendChild(content);
+// document.createTextNode(content)
+// var textnode = document.createTextNode(content)
 
 
 // eksempel:
 
-var div_element = document.getElementById("main");
-
-var h2_element = document.createElement("h2");
-var h2_text = document.createTextNode(leke[i].navn);
-h2_element.appendChild(h2_text);
-div_element.appendChild(h2_element);
-
-var p_element = document.createElement("p");
-var p_text = document.createTextNode(leke[i].latitude);
-p_element.appendChild(p_text);
-div_element.appendChild(p_element);
-
-var p_element2 = document.createElement("p");
-var p_text2 = document.createTextNode(leke[i].longitude);
-p_element.appendChild(p_text2);
-div_element.appendChild(p_element2);
-
-var p_element3 = document.createElement("p");
-var p_text3 = document.createTextNode(leke[i].id);
-p_element.appendChild(p_text3);
-div_element.appendChild(p_element3);
+// var div_element = document.getElementById("main");
+//
+// var h2_element = document.createElement("h2");
+// var h2_text = document.createTextNode(leke[i].navn);
+// h2_element.appendChild(h2_text);
+// div_element.appendChild(h2_element);
+//
+// var p_element = document.createElement("p");
+// var p_text = document.createTextNode(leke[i].latitude);
+// p_element.appendChild(p_text);
+// div_element.appendChild(p_element);
+//
+// var p_element2 = document.createElement("p");
+// var p_text2 = document.createTextNode(leke[i].longitude);
+// p_element.appendChild(p_text2);
+// div_element.appendChild(p_element2);
+//
+// var p_element3 = document.createElement("p");
+// var p_text3 = document.createTextNode(leke[i].id);
+// p_element.appendChild(p_text3);
+// div_element.appendChild(p_element3);
 
 // markersfiks
 
-var markers = [];
+//var markers = [];
 
 function addMarkers() {
   for(let marker in markers)
