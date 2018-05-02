@@ -210,36 +210,35 @@ function flagCheck() {
 
 
 
-
+// Funksjon som lager et søkeobjekt.
+//
+//
 
 function makeSearchobj() {
   var gender = /(dame|ladies)/i;
-  var price = /(pris:|price:)\d+/i;
+  var price = /(pris:|price:)\d+|(gratis|free)/i;
   var wheelchair = /(rullestol|wheel chair)/i;
   var nursery = /(stellerom|nursery)/i;
-  var free = /(gratis|free)/i;
   var opennow = /(åpen|open)/i;
   var open = /(åpen:|open:)\d+.\d+|(åpen:|open:)\d+/;
   var searchParam =  document.getElementById("sokinput").value;
   searchObj = {};
 
-//  if(sokeParam.split(/\s/)[0] != gender) {
-//    sokeObj["navn"] = sokeParam.split(/\s/)[0];
-//  }
+  if(!gender.test(searchParam.split(/\s/)[0])&!price.test(searchParam.split(/\s/)[0])&!wheelchair.test(searchParam.split(/\s/)[0])&!nursery.test(searchParam.split(/\s/)[0])&!open.test(searchParam.split(/\s/)[0])&!opennow.test(searchParam.split(/\s/)[0])) searchObj["navn"] = searchParam.split(/\s/)[0];
+
+
   if(gender.test(searchParam)) {
     searchObj["gender"] = "1";
   }
   if(price.test(searchParam)) {
     searchObj["price"] = searchParam.match(price)[0].split(/:/)[1];
+    if(searchObj.price == null) searchObj["price"] = "0"; // Dette er for å fange opp bruk av gratis som søkeord, slik at et søk kjører maksPris(0) hvis gratis eller free er til stede.
   }
   if(wheelchair.test(searchParam)) {
     searchObj["wheelchair"] = "1";
   }
   if(nursery.test(searchParam)) {
     searchObj["nursery"] = "1";
-  }
-  if(free.test(searchParam)) {
-    searchObj["free"] = "1";
   }
   if(open.test(searchParam)) {
     searchObj["open"] = searchParam.match(open)[0].split(/:/)[1];
@@ -259,6 +258,7 @@ function nysokeFunk() {
   if(searchObj.gender == "1") harDame();
   if(searchObj.nursery == "1") harStell();
   if(searchObj.opennow == "1") openNow();
+  if(searchObj.wheelchair == "1") hasWheelchair();
 
   //etc
 }
@@ -432,6 +432,29 @@ function maksPris(pris) {
   refresh();
   printRes(sokeRes);
   flag = 1;
+}
+
+function hasWheelchair() {
+  //  if(flagCheck() == true) return;
+
+    sokeRes = [];
+    var x = [];
+    for(i = 0; i < dataset.entries.length; i++) {
+      if(dataset.entries[i].rullestol == "1") {
+        x.push(i);
+        sokeRes.push(dataset.entries[i]);
+        };
+      };
+      //if(sokeObj.length > 1) return sokeRes;
+
+      showMarkers(false);
+      for(i = 0; i < x.length; i++) {
+        markers[x[i]].setVisible(true);
+      };
+
+    refresh();
+    printRes(sokeRes);
+    flag = 1;
 }
 
 
