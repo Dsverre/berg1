@@ -538,10 +538,15 @@ var p_text = document.createTextNode(leke[i].latitude);
 p_element.appendChild(p_text);
 div_element.appendChild(p_element);
 
-var p_element = document.createElement("p");
-var p_text = document.createTextNode(leke[i].longitude);
-p_element.appendChild(p_text);
-div_element.appendChild(p_element);
+var p_element2 = document.createElement("p");
+var p_text2 = document.createTextNode(leke[i].longitude);
+p_element.appendChild(p_text2);
+div_element.appendChild(p_element2);
+
+var p_element3 = document.createElement("p");
+var p_text3 = document.createTextNode(leke[i].id);
+p_element.appendChild(p_text3);
+div_element.appendChild(p_element3);
 
 // markersfiks
 
