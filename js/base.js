@@ -65,10 +65,23 @@ function hentUrl(url) {
 // Ble gjort global for å gi flagCheck() muligheten til å printe kun lista, og ikke måtte kjøre hele initList()
 // Inneholder en sjekk for å avgjøre kilde-syntax.
 // Tar et dataset med JSON objekter som parameter.
+//
+// Er nå utvidet til å gjelde for både printing av datasettet og printing av sokeRes.
+// Ved å passere "res" som argument i printSet(sokeRes, "res"), så skjønner printSet() at det er sokeRes og at derfor .entries ikke trengs.
 function printSet(set) {
-  for(i = 0; i < dataset.entries.length; i++) {
-    if(syntax == "leke") var holder = set.entries[i].navn;
-    else if(syntax == "toaletter") var holder = set.entries[i].plassering;
+  if(syntax == "leke") var param = "navn";
+  else if(syntax == "toaletter") var param = "plassering";
+
+  if(arguments[1] == "res") {
+    for(i = 0; i < set.length; i++) {
+      var holder = set[i][param]
+      var node = document.createElement("LI");
+      var textnode = document.createTextNode(i+1 + ": " + holder);
+      node.appendChild(textnode);
+      document.getElementById("liste").appendChild(node);
+    };}
+  for(i = 0; i < set.entries.length; i++) {
+    var holder = set.entries[i][param];
     var node = document.createElement("LI");
     var textnode = document.createTextNode(i+1 + ": " + holder);
     node.appendChild(textnode);
@@ -149,29 +162,12 @@ function markAuto() {
     };
 }
 
-// kan fjerne alle markørene.
 
 
 // Funksjon for å tømme #liste-elementet. Føles smått overflødig eller i det minste meget uelegant.
 function refresh() {
   while(document.getElementById("liste").hasChildNodes()) {
      document.getElementById("liste").removeChild(document.getElementById("liste").firstChild);
-  };
-}
-
-
-// Funksjon som brukes av de fleste søkefunksjonene for å skrive en ny liste.
-// Per nå sjekket det et flagg for å tømme listen før man fyller den med resultatet av denne funksjonen, men føles uelegant.
-// Blir fødd med et sokeRes av de fleste funksjoner som bruker den, så kanskje kan sokeRes derfor gjøres lokal.
-// Bemerk at res, altså en lokal sokeRes, har blitt fyllt med JSON-objektene, noe som betyr at man ikke trnger .entries som ellers.
-function printRes(res) {
-  for(i = 0; i < res.length; i++) {
-    var node = document.createElement("LI");
-    if(syntax == "leke") var holder = res[i].navn;
-    else if(syntax == "toaletter") var holder = res[i].plassering;
-    var textnode = document.createTextNode(i+1 + ": " + holder);
-    node.appendChild(textnode);
-    document.getElementById("liste").appendChild(node);
   };
 }
 
@@ -254,13 +250,18 @@ function makeSearchobj() {
 
 
 function nysokeFunk() {
+  if(flagCheck() == true) return;
   makeSearchobj();
   if(searchObj.price != null) maksPris(searchObj.price);
   if(searchObj.gender == "1") harDame();
   if(searchObj.nursery == "1") harStell();
-  if(searchObj.opennow == "1") openNow();
-  if(searchObj.wheelchair == "1") hasWheelchair();
+  //if(searchObj.opennow == "1") openNow();
+  //if(searchObj.wheelchair == "1") hasWheelchair();
+  if(Object.keys(searchObj).length == 1) return;
 
+  refresh();
+  printSet(sokeRes, "res");
+  flag = "1";
   //etc
 }
 
@@ -295,7 +296,7 @@ function sokeFunk() {
   };
 
   refresh();
-  printRes(sokeRes);
+  printSet(sokeRes, "res");
 }
 
 
@@ -330,7 +331,7 @@ function openNow() {
       markers[x[i]].setVisible(true);
     };
     refresh();
-    printRes(sokeRes);
+    printSet(sokeRes, "res");
     flag = 1;
 }
 
@@ -339,7 +340,16 @@ function openNow() {
 // Ellers ganske intuitiv kode, dog noe gammel.
 function openSunday() {
   if(flagCheck() == true) return;
-
+  if(sokeRes.length != "0") {
+    var tempRes = [];
+    for(i = 0; i < sokeRes.length; i++) {
+      if(sokeRes[i].tid_sondag != "NULL") {
+        tempRes.push(sokeRes[i]);
+        };
+      };
+    sokeRes = tempRes;
+  }
+  else {
   sokeRes = [];
   var x = [];
   for(i = 0; i < dataset.entries.length; i++) {
@@ -348,6 +358,9 @@ function openSunday() {
       sokeRes.push(dataset.entries[i]);
       };
     };
+  }
+
+    if(Object.keys(searchObj).length > 1) return sokeRes;
 
     showMarkers(false);
     for(i = 0; i < x.length; i++) {
@@ -355,7 +368,7 @@ function openSunday() {
     };
 
   refresh();
-  printRes(sokeRes);
+  printSet(sokeRes, "res");
   flag = 1;
 }
 
@@ -364,16 +377,29 @@ function openSunday() {
 // Nesten identisk som den over.
 function harDame() {
   if(flagCheck() == true) return;
-
-  sokeRes = [];
-  var x = [];
-  for(i = 0; i < dataset.entries.length; i++) {
-    if(dataset.entries[i].dame != "NULL") {
-      x.push(i);
-      sokeRes.push(dataset.entries[i]);
+  if(sokeRes.length != "0") {
+    var tempRes = [];
+    for(i = 0; i < sokeRes.length; i++) {
+      if(sokeRes[i].dame != "NULL") {
+        tempRes.push(sokeRes[i]);
+        };
       };
-    };
-    //if(sokeObj.length > 1) return sokeRes;
+    sokeRes = tempRes;
+    return sokeRes;
+  }
+
+
+    sokeRes = []
+    var x = [];
+    for(i = 0; i < dataset.entries.length; i++) {
+      if(dataset.entries[i].dame != "NULL") {
+        x.push(i);
+        sokeRes.push(dataset.entries[i]);
+        };
+      };
+
+
+    if(Object.keys(searchObj).length > 1) return sokeRes;
 
     showMarkers(false);
     for(i = 0; i < x.length; i++) {
@@ -381,7 +407,7 @@ function harDame() {
     };
 
   refresh();
-  printRes(sokeRes);
+  printSet(sokeRes, "res");
   flag = 1;
 }
 
@@ -389,15 +415,27 @@ function harDame() {
 // Samme som de over, bare det handler om stellerom.
 function harStell() {
   if(flagCheck() == true) return;
-
-  sokeRes = [];
-  var x = [];
-  for(i = 0; i < dataset.entries.length; i++) {
-    if(dataset.entries[i].stellerom != "NULL") {
-      x.push(i);
-      sokeRes.push(dataset.entries[i]);
+  if(sokeRes.length != "0") {
+    var tempRes = [];
+    for(i = 0; i < sokeRes.length; i++) {
+      if(sokeRes[i].stellerom != "NULL") {
+        tempRes.push(sokeRes[i]);
+        };
       };
-    };
+    sokeRes = tempRes;
+  }
+  else {
+    sokeRes = [];
+    var x = [];
+    for(i = 0; i < dataset.entries.length; i++) {
+      if(dataset.entries[i].stellerom != "NULL") {
+        x.push(i);
+        sokeRes.push(dataset.entries[i]);
+        };
+      };
+  }
+
+    if(Object.keys(searchObj).length > 1) return sokeRes;
 
     showMarkers(false);
     for(i = 0; i < x.length; i++) {
@@ -405,7 +443,7 @@ function harStell() {
     };
 
   refresh();
-  printRes(sokeRes);
+  printSet(sokeRes, "res");
   flag = 1;
 }
 
@@ -413,7 +451,7 @@ function harStell() {
 // Funksjon for å representerere de objektene som har pris under parameteren "pris".
 // Om man vil vise toaletter som er gratis føder man inn 0.
 function maksPris(pris) {
-//  if(flagCheck() == true) return;
+  if(flagCheck() == true) return;
 
   sokeRes = [];
   var x = [];
@@ -423,7 +461,7 @@ function maksPris(pris) {
       sokeRes.push(dataset.entries[i]);
       };
     };
-    //if(sokeObj.length > 1) return sokeRes;
+    if(Object.keys(searchObj).length > 1) return sokeRes;
 
     showMarkers(false);
     for(i = 0; i < x.length; i++) {
@@ -431,7 +469,7 @@ function maksPris(pris) {
     };
 
   refresh();
-  printRes(sokeRes);
+  printSet(sokeRes, "res");
   flag = 1;
 }
 
@@ -454,18 +492,12 @@ function hasWheelchair() {
       };
 
     refresh();
-    printRes(sokeRes);
+    printSet(sokeRes, "res");
     flag = 1;
 }
 
 
 
-// Funksjon som regner ut avstanden fra talett nr 1. til nr 14.
-<<<<<<< HEAD
-//window.alert(getDistanceFromLatLonInKm(60.3879681,5.334608,60.3973581,5.3132629).toFixed(1));
-=======
-
->>>>>>> a8a390eb48387339d16fdd4af4d6f909c85097a9
 function getDistanceFromLatLonInKm(lat1,lon1,lat2,lon2) {
 var R = 6371; // Radius av jorden i km
 var dLat = deg2rad(lat2-lat1);
