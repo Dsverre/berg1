@@ -199,6 +199,7 @@ function flagCheck() {
     printSet(dataset);
     showMarkers(true);
     flag = 0;
+    sokeRes = []
     return true;
   };
 
@@ -255,13 +256,14 @@ function nysokeFunk() {
   if(searchObj.price != null) maksPris(searchObj.price);
   if(searchObj.gender == "1") harDame();
   if(searchObj.nursery == "1") harStell();
-  //if(searchObj.opennow == "1") openNow();
-  //if(searchObj.wheelchair == "1") hasWheelchair();
+  if(searchObj.opennow == "1") openNow();
+  if(searchObj.wheelchair == "1") hasWheelchair();
+  if(searchObj.open != null) ;
+  flag = "1";
   if(Object.keys(searchObj).length == 1) return;
 
   refresh();
   printSet(sokeRes, "res");
-  flag = "1";
   //etc
 }
 
@@ -309,7 +311,23 @@ function openNow() {
   var time = new Date();
   now = time.getHours() + "." + time.getMinutes();
   if(flagCheck() == true) return;
-
+  if(sokeRes.length != "0") {
+    var tempRes = [];
+    for(i = 0; i < sokeRes.length; i++) {
+      tid = [];
+      tid = sokeRes[i].tid_hverdag.split(/[\s,]+/);
+      if(sokeRes[i].tid_hverdag == "ALL") {
+        //x.push(i);
+        tempRes.push(sokeRes[i]);
+      }
+      else if(parseFloat(now) >= tid[0] && parseFloat(now) <= tid[2]) {
+        //x.push(i);
+        tempRes.push(sokeRes[i]);
+        }
+    sokeRes = tempRes;
+    return sokeRes;
+    };
+  }
   sokeRes = [];
   var x = [];
 
@@ -348,8 +366,8 @@ function openSunday() {
         };
       };
     sokeRes = tempRes;
+    return sokeRes;
   }
-  else {
   sokeRes = [];
   var x = [];
   for(i = 0; i < dataset.entries.length; i++) {
@@ -358,7 +376,6 @@ function openSunday() {
       sokeRes.push(dataset.entries[i]);
       };
     };
-  }
 
     if(Object.keys(searchObj).length > 1) return sokeRes;
 
@@ -423,17 +440,17 @@ function harStell() {
         };
       };
     sokeRes = tempRes;
+    return sokeRes;
   }
-  else {
     sokeRes = [];
     var x = [];
-    for(i = 0; i < dataset.entries.length; i++) {
-      if(dataset.entries[i].stellerom != "NULL") {
-        x.push(i);
-        sokeRes.push(dataset.entries[i]);
-        };
+  for(i = 0; i < dataset.entries.length; i++) {
+    if(dataset.entries[i].stellerom != "NULL") {
+      x.push(i);
+      sokeRes.push(dataset.entries[i]);
       };
-  }
+    };
+
 
     if(Object.keys(searchObj).length > 1) return sokeRes;
 
@@ -452,7 +469,16 @@ function harStell() {
 // Om man vil vise toaletter som er gratis føder man inn 0.
 function maksPris(pris) {
   if(flagCheck() == true) return;
-
+  if(sokeRes.length != "0") {
+    var tempRes = [];
+    for(i = 0; i < sokeRes.length; i++) {
+      if(parseFloat(sokeRes[i].pris) <= parseFloat(pris) | sokeRes[i].pris == "NULL") {
+        tempRes.push(sokeRes[i]);
+        };
+      };
+    sokeRes = tempRes;
+    return sokeRes;
+  }
   sokeRes = [];
   var x = [];
   for(i = 0; i < dataset.entries.length; i++) {
@@ -474,8 +500,17 @@ function maksPris(pris) {
 }
 
 function hasWheelchair() {
-  //  if(flagCheck() == true) return;
-
+  if(flagCheck() == true) return;
+  if(sokeRes.length != "0") {
+    var tempRes = [];
+    for(i = 0; i < sokeRes.length; i++) {
+      if(sokeRes[i].rullestol == "1") {
+        tempRes.push(sokeRes[i]);
+        };
+      };
+    sokeRes = tempRes;
+    return sokeRes;
+  }
     sokeRes = [];
     var x = [];
     for(i = 0; i < dataset.entries.length; i++) {
