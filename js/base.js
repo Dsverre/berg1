@@ -210,6 +210,61 @@ function flagCheck() {
 
 
 
+
+// Funksjon som lager et søkeobjekt.
+//
+//
+
+function makeSearchobj() {
+  var gender = /(dame|ladies)/i;
+  var price = /(pris:|price:)\d+|(gratis|free)/i;
+  var wheelchair = /(rullestol|wheel chair)/i;
+  var nursery = /(stellerom|nursery)/i;
+  var opennow = /(åpen|open)/i;
+  var open = /(åpen:|open:)\d+.\d+|(åpen:|open:)\d+/;
+  var searchParam =  document.getElementById("sokinput").value;
+  searchObj = {};
+
+  if(!gender.test(searchParam.split(/\s/)[0])&!price.test(searchParam.split(/\s/)[0])&!wheelchair.test(searchParam.split(/\s/)[0])&!nursery.test(searchParam.split(/\s/)[0])&!open.test(searchParam.split(/\s/)[0])&!opennow.test(searchParam.split(/\s/)[0])) searchObj["navn"] = searchParam.split(/\s/)[0];
+
+
+  if(gender.test(searchParam)) {
+    searchObj["gender"] = "1";
+  }
+  if(price.test(searchParam)) {
+    searchObj["price"] = searchParam.match(price)[0].split(/:/)[1];
+    if(searchObj.price == null) searchObj["price"] = "0"; // Dette er for å fange opp bruk av gratis som søkeord, slik at et søk kjører maksPris(0) hvis gratis eller free er til stede.
+  }
+  if(wheelchair.test(searchParam)) {
+    searchObj["wheelchair"] = "1";
+  }
+  if(nursery.test(searchParam)) {
+    searchObj["nursery"] = "1";
+  }
+  if(open.test(searchParam)) {
+    searchObj["open"] = searchParam.match(open)[0].split(/:/)[1];
+  }
+  if(opennow.test(searchParam)) {
+    if(!open.test(searchParam)) searchObj["opennow"] = "1";
+  }
+  return searchObj;
+}
+
+
+
+
+function nysokeFunk() {
+  makeSearchobj();
+  if(searchObj.price != null) maksPris(searchObj.price);
+  if(searchObj.gender == "1") harDame();
+  if(searchObj.nursery == "1") harStell();
+  if(searchObj.opennow == "1") openNow();
+  if(searchObj.wheelchair == "1") hasWheelchair();
+
+  //etc
+}
+
+
 //IndexOf + Include (js-funksjoner til å matche treff)
 //
 // Siste utgave av sokeFunk().
@@ -244,30 +299,6 @@ function sokeFunk() {
 }
 
 
-// Er trolig fullstendig overflødig.
-// Hele søkefunksjonen bør nok utføres av samme funksjon.
-// Jobb heller med å utvikle den.
-var treff;
-var adresser = [];
-function asokeFunk() {
-  var sokeParam = document.getElementById("sokinput").value;
-  adresser = Object.keys(dataset.adresse);
-  adresser = new RegExp(dataset[0].adresse|dataset[1].adresse|dataset[2].adresse|dataset[3].adresse|dataset[4].adresse|dataset[5].adresse|dataset[6].adresse|dataset[7].adresse|dataset[8].adresse|dataset[9].adresse|dataset[10].adresse|dataset[11].adresse|dataset[12].adresse|dataset[13].adresse);
-  treff = sokeParam.match(adresse);
-//  var searchParams = Object.keys(searchObject);
-  //for(i=0; i < dataset.length; i++) {
-    //var truthChecker = [] // will contain boolean values "true" for each param checked.
-    //for(y=0; y < searchParams.length; y++) {
-        //if(persons[i][searchParams[y]] == searchObject[searchParams[y]]) {
-          //  truthChecker.push(true);
-      //  }
-        //if(truthChecker.length == searchParams.length) { //if all params are true, person is pushed.
-          //  searchResults.push(persons[i]);
-      //  }
-  //  }
-//}
-
-}
 
 
 // Uferdig funksjon for å sjekke hvilke toaletter som er åpne nå.
@@ -342,6 +373,7 @@ function harDame() {
       sokeRes.push(dataset.entries[i]);
       };
     };
+    //if(sokeObj.length > 1) return sokeRes;
 
     showMarkers(false);
     for(i = 0; i < x.length; i++) {
@@ -377,8 +409,63 @@ function harStell() {
   flag = 1;
 }
 
+
+// Funksjon for å representerere de objektene som har pris under parameteren "pris".
+// Om man vil vise toaletter som er gratis føder man inn 0.
+function maksPris(pris) {
+//  if(flagCheck() == true) return;
+
+  sokeRes = [];
+  var x = [];
+  for(i = 0; i < dataset.entries.length; i++) {
+    if(parseFloat(dataset.entries[i].pris) <= parseFloat(pris) | dataset.entries[i].pris == "NULL") {
+      x.push(i);
+      sokeRes.push(dataset.entries[i]);
+      };
+    };
+    //if(sokeObj.length > 1) return sokeRes;
+
+    showMarkers(false);
+    for(i = 0; i < x.length; i++) {
+      markers[x[i]].setVisible(true);
+    };
+
+  refresh();
+  printRes(sokeRes);
+  flag = 1;
+}
+
+function hasWheelchair() {
+  //  if(flagCheck() == true) return;
+
+    sokeRes = [];
+    var x = [];
+    for(i = 0; i < dataset.entries.length; i++) {
+      if(dataset.entries[i].rullestol == "1") {
+        x.push(i);
+        sokeRes.push(dataset.entries[i]);
+        };
+      };
+      //if(sokeObj.length > 1) return sokeRes;
+
+      showMarkers(false);
+      for(i = 0; i < x.length; i++) {
+        markers[x[i]].setVisible(true);
+      };
+
+    refresh();
+    printRes(sokeRes);
+    flag = 1;
+}
+
+
+
 // Funksjon som regner ut avstanden fra talett nr 1. til nr 14.
+<<<<<<< HEAD
 //window.alert(getDistanceFromLatLonInKm(60.3879681,5.334608,60.3973581,5.3132629).toFixed(1));
+=======
+
+>>>>>>> a8a390eb48387339d16fdd4af4d6f909c85097a9
 function getDistanceFromLatLonInKm(lat1,lon1,lat2,lon2) {
 var R = 6371; // Radius av jorden i km
 var dLat = deg2rad(lat2-lat1);
