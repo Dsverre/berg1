@@ -20,7 +20,7 @@ window.onload = function() {
      initList("https://hotell.difi.no/api/json/bergen/lekeplasser?");
      syntax = "leke"
   }
-  else if(page == "utsikt.html" {
+  else if(page == "utsikt.html") {
      initList("https://hotell.difi.no/api/json/stavanger/utsiktspunkt?");
      syntax = "utsikt"
   }
@@ -324,13 +324,13 @@ function openNow() {
         //x.push(i);
         tempRes.push(sokeRes[i]);
       }
-      else if(parseFloat(now) >= tid[0] && parseFloat(now) <= tid[2]) {
+      else if(parseFloat(arguments[0]) >= tid[0] && parseFloat(arguments[0]) <= tid[2]) {
         //x.push(i);
         tempRes.push(sokeRes[i]);
         }
-      sokeRes = tempRes;
-      return sokeRes;
       };
+      sokeRes = tempRes;
+      return;
     }
     else {
       var tempRes = [];
@@ -341,11 +341,13 @@ function openNow() {
         //x.push(i);
         tempRes.push(sokeRes[i]);
       }
-      else if(parseFloat(arguments[0]) >= tid[0] && parseFloat(arguments[0]) <= tid[2]) {
+      else if(parseFloat(now) >= tid[0] && parseFloat(now) <= tid[2]) {
         //x.push(i);
         tempRes.push(sokeRes[i]);
         }
       };
+      sokeRes = tempRes;
+      return;
     }
 
   }
@@ -380,6 +382,7 @@ function openNow() {
     };
   }
 
+
     showMarkers(false);
     for(i = 0; i < x.length; i++) {
       markers[x[i]].setVisible(true);
@@ -402,7 +405,7 @@ function openSunday() {
         };
       };
     sokeRes = tempRes;
-    return sokeRes;
+    return;
   }
   sokeRes = [];
   var x = [];
@@ -413,7 +416,7 @@ function openSunday() {
       };
     };
 
-    if(Object.keys(searchObj).length > 1) return sokeRes;
+    if(Object.keys(searchObj).length > 1) return;
 
     showMarkers(false);
     for(i = 0; i < x.length; i++) {
@@ -438,7 +441,7 @@ function harDame() {
         };
       };
     sokeRes = tempRes;
-    return sokeRes;
+    return;
   }
 
 
@@ -452,7 +455,7 @@ function harDame() {
       };
 
 
-    if(Object.keys(searchObj).length > 1) return sokeRes;
+    if(Object.keys(searchObj).length > 1) return;
 
     showMarkers(false);
     for(i = 0; i < x.length; i++) {
@@ -476,7 +479,7 @@ function harStell() {
         };
       };
     sokeRes = tempRes;
-    return sokeRes;
+    return;
   }
     sokeRes = [];
     var x = [];
@@ -488,7 +491,7 @@ function harStell() {
     };
 
 
-    if(Object.keys(searchObj).length > 1) return sokeRes;
+    if(Object.keys(searchObj).length > 1) return;
 
     showMarkers(false);
     for(i = 0; i < x.length; i++) {
@@ -513,7 +516,7 @@ function maksPris(pris) {
         };
       };
     sokeRes = tempRes;
-    return sokeRes;
+    return;
   }
   sokeRes = [];
   var x = [];
@@ -523,7 +526,7 @@ function maksPris(pris) {
       sokeRes.push(dataset.entries[i]);
       };
     };
-    if(Object.keys(searchObj).length > 1) return sokeRes;
+    if(Object.keys(searchObj).length > 1) return;
 
     showMarkers(false);
     for(i = 0; i < x.length; i++) {
@@ -545,7 +548,7 @@ function hasWheelchair() {
         };
       };
     sokeRes = tempRes;
-    return sokeRes;
+    return;
   }
     sokeRes = [];
     var x = [];
@@ -555,7 +558,8 @@ function hasWheelchair() {
         sokeRes.push(dataset.entries[i]);
         };
       };
-      //if(sokeObj.length > 1) return sokeRes;
+
+    if(Object.keys(searchObj).length > 1) return;
 
       showMarkers(false);
       for(i = 0; i < x.length; i++) {
