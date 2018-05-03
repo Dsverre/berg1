@@ -4,7 +4,7 @@ var flag = 0; //Et flagg som brukes av de booleanske funksjonene via flagCheck()
 var dataset; //Arrayet som holder alle JSON-objektene som sidene er bygget rundt. Klargjøres vha løftet hentUrl() utført av initList(). Blir ikke manifulert av noe per nå. Må ha .entries med begge datasettene, og de har dessverre forskjellige navn på egenskapene, derav disse if og else if'ene.
 var map; //Holder hele kartet? Måtte være global for at markørene skulle kunne skjules, men kan være overflødig.
 var syntax; //Brukes for å avgjøre hvilket datasett siden bruker. Blir satt via onload-sjekken.
-
+var ongoing = 0;
 
 // Ved lasting av vinduet kjøres en skreddersydd funksjon.
 // Denne funksjonen starter med å splitte nettadressen ved /, før den lagrer det siste leddet av denne splitten som en variabel.
@@ -262,7 +262,8 @@ function nysokeFunk() {
   if(searchObj.opennow == "1") openNow();
   if(searchObj.wheelchair == "1") hasWheelchair();
   if(searchObj.open != null) openNow(searchObj.open);
-  flag = "1";
+  flag = 1;
+  ongoing = 0;
   if(Object.keys(searchObj).length == 1) return;
 
   refresh();
@@ -314,7 +315,7 @@ function openNow() {
   var time = new Date();
   now = time.getHours() + "." + time.getMinutes();
   if(flagCheck() == true) return;
-  if(sokeRes.length != "0") {
+  if(ongoing == 1) {
     if(arguments.length != null) {
     var tempRes = [];
     for(i = 0; i < sokeRes.length; i++) {
@@ -351,7 +352,7 @@ function openNow() {
     }
 
   }
-  sokeRes = [];
+
   var x = [];
   if(arguments.length != null) {
     for(i = 0; i < dataset.entries.length; i++) {
@@ -382,6 +383,10 @@ function openNow() {
     };
   }
 
+  if(Object.keys(searchObj).length > 1) {
+    ongoing = 1;
+    return;
+  }
 
     showMarkers(false);
     for(i = 0; i < x.length; i++) {
@@ -397,7 +402,7 @@ function openNow() {
 // Ellers ganske intuitiv kode, dog noe gammel.
 function openSunday() {
   if(flagCheck() == true) return;
-  if(sokeRes.length != "0") {
+  if(ongoing == 1) {
     var tempRes = [];
     for(i = 0; i < sokeRes.length; i++) {
       if(sokeRes[i].tid_sondag != "NULL") {
@@ -407,7 +412,7 @@ function openSunday() {
     sokeRes = tempRes;
     return;
   }
-  sokeRes = [];
+
   var x = [];
   for(i = 0; i < dataset.entries.length; i++) {
     if(dataset.entries[i].tid_sondag != "NULL") {
@@ -416,7 +421,10 @@ function openSunday() {
       };
     };
 
-    if(Object.keys(searchObj).length > 1) return;
+    if(Object.keys(searchObj).length > 1) {
+      ongoing = 1;
+      return;
+    }
 
     showMarkers(false);
     for(i = 0; i < x.length; i++) {
@@ -433,7 +441,7 @@ function openSunday() {
 // Nesten identisk som den over.
 function harDame() {
   if(flagCheck() == true) return;
-  if(sokeRes.length != "0") {
+  if(ongoing == 1) {
     var tempRes = [];
     for(i = 0; i < sokeRes.length; i++) {
       if(sokeRes[i].dame != "NULL") {
@@ -444,8 +452,6 @@ function harDame() {
     return;
   }
 
-
-    sokeRes = []
     var x = [];
     for(i = 0; i < dataset.entries.length; i++) {
       if(dataset.entries[i].dame != "NULL") {
@@ -455,7 +461,10 @@ function harDame() {
       };
 
 
-    if(Object.keys(searchObj).length > 1) return;
+      if(Object.keys(searchObj).length > 1) {
+        ongoing = 1;
+        return;
+      }
 
     showMarkers(false);
     for(i = 0; i < x.length; i++) {
@@ -471,7 +480,7 @@ function harDame() {
 // Samme som de over, bare det handler om stellerom.
 function harStell() {
   if(flagCheck() == true) return;
-  if(sokeRes.length != "0") {
+  if(ongoing == 1) {
     var tempRes = [];
     for(i = 0; i < sokeRes.length; i++) {
       if(sokeRes[i].stellerom != "NULL") {
@@ -481,7 +490,6 @@ function harStell() {
     sokeRes = tempRes;
     return;
   }
-    sokeRes = [];
     var x = [];
   for(i = 0; i < dataset.entries.length; i++) {
     if(dataset.entries[i].stellerom != "NULL") {
@@ -491,7 +499,10 @@ function harStell() {
     };
 
 
-    if(Object.keys(searchObj).length > 1) return;
+    if(Object.keys(searchObj).length > 1) {
+      ongoing = 1;
+      return;
+    }
 
     showMarkers(false);
     for(i = 0; i < x.length; i++) {
@@ -508,7 +519,7 @@ function harStell() {
 // Om man vil vise toaletter som er gratis føder man inn 0.
 function maksPris(pris) {
   if(flagCheck() == true) return;
-  if(sokeRes.length != "0") {
+  if(ongoing == 1) {
     var tempRes = [];
     for(i = 0; i < sokeRes.length; i++) {
       if(parseFloat(sokeRes[i].pris) <= parseFloat(pris) | sokeRes[i].pris == "NULL") {
@@ -518,7 +529,6 @@ function maksPris(pris) {
     sokeRes = tempRes;
     return;
   }
-  sokeRes = [];
   var x = [];
   for(i = 0; i < dataset.entries.length; i++) {
     if(parseFloat(dataset.entries[i].pris) <= parseFloat(pris) | dataset.entries[i].pris == "NULL") {
@@ -526,7 +536,11 @@ function maksPris(pris) {
       sokeRes.push(dataset.entries[i]);
       };
     };
-    if(Object.keys(searchObj).length > 1) return;
+
+    if(Object.keys(searchObj).length > 1) {
+      ongoing = 1;
+      return;
+    }
 
     showMarkers(false);
     for(i = 0; i < x.length; i++) {
@@ -540,7 +554,7 @@ function maksPris(pris) {
 
 function hasWheelchair() {
   if(flagCheck() == true) return;
-  if(sokeRes.length != "0") {
+  if(ongoing == 1) {
     var tempRes = [];
     for(i = 0; i < sokeRes.length; i++) {
       if(sokeRes[i].rullestol == "1") {
@@ -550,7 +564,6 @@ function hasWheelchair() {
     sokeRes = tempRes;
     return;
   }
-    sokeRes = [];
     var x = [];
     for(i = 0; i < dataset.entries.length; i++) {
       if(dataset.entries[i].rullestol == "1") {
@@ -559,7 +572,10 @@ function hasWheelchair() {
         };
       };
 
-    if(Object.keys(searchObj).length > 1) return;
+    if(Object.keys(searchObj).length > 1) {
+      ongoing = 1;
+      return;
+    }
 
       showMarkers(false);
       for(i = 0; i < x.length; i++) {
