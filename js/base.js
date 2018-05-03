@@ -4,7 +4,7 @@ var flag = 0; //Et flagg som brukes av de booleanske funksjonene via flagCheck()
 var dataset; //Arrayet som holder alle JSON-objektene som sidene er bygget rundt. Klargjøres vha løftet hentUrl() utført av initList(). Blir ikke manifulert av noe per nå. Må ha .entries med begge datasettene, og de har dessverre forskjellige navn på egenskapene, derav disse if og else if'ene.
 var map; //Holder hele kartet? Måtte være global for at markørene skulle kunne skjules, men kan være overflødig.
 var syntax; //Brukes for å avgjøre hvilket datasett siden bruker. Blir satt via onload-sjekken.
-var ongoing = 0;
+var ongoing = 0; // Brukes for å avgjøre om de forskjellige søkefunksjonen skal forholde seg til searchRes og ikke datasettet, samt at det skal returnere før resultatene skal presenteres.
 
 // Ved lasting av vinduet kjøres en skreddersydd funksjon.
 // Denne funksjonen starter med å splitte nettadressen ved /, før den lagrer det siste leddet av denne splitten som en variabel.
@@ -93,7 +93,7 @@ function printSet(set) {
 
 // Funksjonen som er ryggraden i hele skriptet.
 // Her hentes datasettet, #liste elementet fylles av objektene datasettet inneholder via printSet().
-// Etter dette kjøres markAuto() for å initialisere markørene.
+// Etter dette kjøres markAuto() for å initialisere markørene, med datasettet som kilde.
 //
 // For å få tak i selve datasettet, så må man gi det til den anonyme funksjonen(result).
 //
@@ -117,6 +117,9 @@ function initList(url) {
 // Det er viktig at this brukes for å få tak i innholdet vi lagrer i markøren.
 //
 // Til slutt fylles markers-arrayet.
+//
+// Funksjonen er nå gjort generell på samme måte som printSet.
+// Ved å føde inn sokeRes og "res" som annet argument, så lager den markører til hhv searchRes eller dataset.
 function markAuto(set) {
   if(syntax == "leke") var param = "navn";
   else if(syntax == "toaletter") var param = "plassering";
@@ -207,7 +210,7 @@ function markAuto(set) {
 
 
 
-// Funksjon for å tømme #liste-elementet. Føles smått overflødig eller i det minste meget uelegant.
+// Funksjon for å tømme #liste-elementet. Kjøres før resultater skal printes til liste.
 function refresh() {
   while(document.getElementById("liste").hasChildNodes()) {
      document.getElementById("liste").removeChild(document.getElementById("liste").firstChild);
@@ -229,12 +232,14 @@ function showMarkers(para) {
 // Flaggsjekkfunksjonen.
 // Tanken er at når funksjoner har manipulert listen eller markørene, så skal flag settes til 1.
 // På denne måten kan man sjekke om noe har blitt manipulert, slik at dette kan resettes før et nytt søk.
-// Den er per nå et stykke unna full funksjonalitet.
-// De fleste funksjoner bør forholde seg til denne, og den bør også har kotroll over innholdet til mange variabler, om enn indirekte.
+// Returnerer true, slik at sjekken kan kjøres og resultatet av sjekken enkelt kan brukes videre i funksjonene.
+//
+// De fleste funksjoner forholder seg til denne, og den har også kotroll over innholdet til mange variabler, om enn indirekte.
 // Enten det, eller så bør den erstattes med alternative løsninger eller lokale løsninger-
 //
 // V1.5 printing av dataset skjer vi egen funksjon.
-// Showmarker() brukes for å vise alle markørene.
+// Bruker nå markAuto() for å lage dem på nytt.
+// R
 // Funker nå ganske bra som funksjon.
 function flagCheck() {
   if(flag == 1) {
@@ -253,7 +258,10 @@ function flagCheck() {
 
 // Funksjon som lager et søkeobjekt.
 //
+//  Den sjekker tekstboksen på toaletter.html og analyserer dataen der gjennom flere rexex's.
+// Videre, hvis dataen får treff, så lagrer den disse resultatene som egenskaper til objektet.
 //
+// Avslutter med å returnere objektet, slik at det kan brukes av andre funksjoner.
 
 function makeSearchobj() {
   if(document.getElementById("sokinput").value == "") return;
@@ -294,7 +302,14 @@ function makeSearchobj() {
 }
 
 
-
+//  Den reelle søkefunksjonen.
+//
+//  Aller først lages et søkeobjekt, som forklart i funksjonen over.
+// Videre sjekkes egenskapene til objektet, og forskjellige funksjoner kjøres ut fra hvilke treff vi får på egenskaper.
+// Flagget settes til 1 for å markere at søket er ferdig, og ongoing gjør det samme på en annen måte.
+// Det sjekkes så om det bare var 1 søk - isåfall skal vi returne.
+//
+// Til slutt presenteres resultatene
 
 function searchFunc() {
   if(flagCheck() == true) return;
@@ -315,20 +330,12 @@ function searchFunc() {
   showMarkers(false);
   printSet(searchRes, "res");
   markAuto(searchRes, "res");
-  //etc
 }
 
 
-//IndexOf + Include (js-funksjoner til å matche treff)
+// Funksjon som tester hvorvidt navnet stemmer med oppføringer i datasettet(sokeRes om ongoing = 1).
 //
-// Siste utgave av sokeFunk().
-// Ser nå at grunnen til at searchRes er global, er for at man kan sjekke om den er tom før man fyller den med treff.
-// Kanskje dette kan unngås via flagCheck()?
-//
-// searchRes[] og tempMarkers[] fylles med hhv JSON-objektene og de tilhørende markørene som søket resulterer i.
-// Skjuler alle markørene før kun de med treff vises igjen.
-//
-// Lista tømmes før den fylles med treffene via printRes. Her ses kode som kanksje kan erstatte eller tas opp i flagCheck().
+
 function nameSearch() {
   if(flagCheck() == true) return;
 
@@ -364,6 +371,8 @@ if(ongoing == 1) {
   printSet(searchRes, "res");
 }
 
+
+// Enkel funksjon for å teste hvorvidt det er treff på adresse.
 function addrSearch() {
   if(flagCheck() == true) return;
 
@@ -383,7 +392,9 @@ function addrSearch() {
 
 
 
-// Uferdig funksjon for å sjekke hvilke toaletter som er åpne nå.
+// Funksjon som tester mhp åpningstid.
+// Om den har fått et argument - fått en tid fra tekstinput -, så bruker den dette.
+// Om ikke, så bruker den tiden nå.
 var now;
 var tid;
 function openNow() {
@@ -474,7 +485,7 @@ function openNow() {
 
 //Funksjon for å vise representere hvilke objekter som er åpne på søndag.
 // Her brukes flagCheck() for å resette både lista og markørene og returnere hvis man allerede har "checket" checkboxen.
-// Ellers ganske intuitiv kode, dog noe gammel.
+//
 function openSunday() {
   if(flagCheck() == true) return;
   if(ongoing == 1) {
@@ -628,6 +639,8 @@ function maxPricehtml() {
   maxPrice(param);
 }
 
+
+// Enkel funksjon for å sjekke om oppføringen akkomoderer rullestol.
 function hasWheelchair() {
   if(flagCheck() == true) return;
   if(ongoing == 1) {
@@ -714,12 +727,6 @@ return deg * (Math.PI/180); // svaret på utregningen.
 
 // markersfiks
 
-//var markers = [];
-
-function addMarkers() {
-  for(let marker in markers)
-    markers.setMap(null);
-}
 
 // funksjon som parser utsiktspunkter fra .xml dokument.
 // responseXML returnerer datasettet som et DOM objekt
