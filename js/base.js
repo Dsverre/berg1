@@ -350,9 +350,11 @@ if(ongoing == 1) {
       };
     }
 
-    if(Object.keys(searchObj).length > 1) {
-      ongoing = 1;
-      return;
+    if (typeof searchObj !== 'undefined') {
+      if(Object.keys(searchObj).length > 1) {
+        ongoing = 1;
+        return;
+      }
     }
 
   showMarkers(false);
@@ -456,9 +458,11 @@ function openNow() {
     };
   }
 
-  if(Object.keys(searchObj).length > 1) {
-    ongoing = 1;
-    return;
+  if (typeof searchObj !== 'undefined') {
+    if(Object.keys(searchObj).length > 1) {
+      ongoing = 1;
+      return;
+    }
   }
 
     showMarkers(false);
@@ -492,9 +496,11 @@ function openSunday() {
       };
     };
 
-    if(Object.keys(searchObj).length > 1) {
-      ongoing = 1;
-      return;
+    if (typeof searchObj !== 'undefined') {
+      if(Object.keys(searchObj).length > 1) {
+        ongoing = 1;
+        return;
+      }
     }
 
   showMarkers(false);
@@ -529,9 +535,11 @@ function hasWomen() {
       };
 
 
-      if(Object.keys(searchObj).length > 1) {
-        ongoing = 1;
-        return;
+      if (typeof searchObj !== 'undefined') {
+        if(Object.keys(searchObj).length > 1) {
+          ongoing = 1;
+          return;
+        }
       }
 
   showMarkers(false);
@@ -564,9 +572,11 @@ function hasNursery() {
     };
 
 
-    if(Object.keys(searchObj).length > 1) {
-      ongoing = 1;
-      return;
+    if (typeof searchObj !== 'undefined') {
+      if(Object.keys(searchObj).length > 1) {
+        ongoing = 1;
+        return;
+      }
     }
 
   showMarkers(false);
@@ -599,9 +609,11 @@ function maxPrice(pris) {
       };
     };
 
-    if(Object.keys(searchObj).length > 1) {
-      ongoing = 1;
-      return;
+    if (typeof searchObj !== 'undefined') {
+      if(Object.keys(searchObj).length > 1) {
+        ongoing = 1;
+        return;
+      }
     }
 
   showMarkers(false);
@@ -609,6 +621,11 @@ function maxPrice(pris) {
   refresh();
   printSet(searchRes, "res");
   flag = 1;
+}
+
+function maxPricehtml() {
+  var param = document.getElementById("pris").value;
+  maxPrice(param);
 }
 
 function hasWheelchair() {
@@ -630,12 +647,12 @@ function hasWheelchair() {
         searchRes.push(dataset.entries[i]);
         };
       };
-
-    if(Object.keys(searchObj).length > 1) {
-      ongoing = 1;
-      return;
-    }
-
+      if (typeof searchObj !== 'undefined') {
+      if(Object.keys(searchObj).length > 1) {
+        ongoing = 1;
+        return;
+      }
+  }
     showMarkers(false);
     markAuto(searchRes, "res");
     refresh();
