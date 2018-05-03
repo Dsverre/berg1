@@ -20,10 +20,6 @@ window.onload = function() {
      initList("https://hotell.difi.no/api/json/bergen/lekeplasser?");
      syntax = "leke"
   }
-  else if(page == "utsikt.html") {
-     initList("https://hotell.difi.no/api/json/stavanger/utsiktspunkt?");
-     syntax = "utsikt"
-  }
 }
 
 // Initiering av kartet. Her settes den globale variabelen map.
@@ -692,4 +688,28 @@ return deg * (Math.PI/180); // svaret på utregningen.
 function addMarkers() {
   for(let marker in markers)
     markers.setMap(null);
+}
+
+// funksjon som parser utsiktspunkter fra .xml dokument.
+// responseXML returnerer datasettet som et DOM objekt
+
+function loadXMLDoc() {
+  var xmlhttp = new XMLHttpRequest();
+  xmlhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      myFunction(this);
+    }
+  };
+  xmlhttp.open("GET", "https://hotell.difi.no/api/xml/stavanger/utsiktspunkt?", true);
+  xmlhttp.send();
+}
+
+function myFunction(xml) {
+  var x, i, xmlDoc, txt;
+  xmlDoc = xml.responseXML;
+  txt = "";
+  x = xmlDoc.getElementsByTagName("name");
+  for (i = 0; i< x.length; i++) {
+    txt += x[i].childNodes[0].nodeValue + "<br>";
+  }
 }
