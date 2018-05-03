@@ -711,5 +711,6 @@ function myFunction(xml) {
   x = xmlDoc.getElementsByTagName("name");
   for (i = 0; i< x.length; i++) {
     txt += x[i].childNodes[0].nodeValue + "<br>";
+    document.getElementById("demo").innerHTML = txt;
   }
 }
