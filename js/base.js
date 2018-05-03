@@ -1,5 +1,5 @@
 var markers = []; //Et array med alle markørene. Fylles i markAuto(), som kalles av intitList, via window.onload. Brukes senere for å skjule alle markørene før man via et midlertidig array viser kun de man har treff på.
-var sokeRes = []; //Et array som holder json-objekter man har truffet i søk. Brukes per nå av alle funksjoner som manipulerer datasettet. Vet ikke om helt det trenger å være globalt, se printRes().
+var searchRes = []; //Et array som holder json-objekter man har truffet i søk. Brukes per nå av alle funksjoner som manipulerer datasettet. Vet ikke om helt det trenger å være globalt, se printRes().
 var flag = 0; //Et flagg som brukes av de booleanske funksjonene via flagCheck(), for å rense listen når man "unchecker". Er kanskje overflødig.
 var dataset; //Arrayet som holder alle JSON-objektene som sidene er bygget rundt. Klargjøres vha løftet hentUrl() utført av initList(). Blir ikke manifulert av noe per nå. Må ha .entries med begge datasettene, og de har dessverre forskjellige navn på egenskapene, derav disse if og else if'ene.
 var map; //Holder hele kartet? Måtte være global for at markørene skulle kunne skjules, men kan være overflødig.
@@ -65,8 +65,8 @@ function hentUrl(url) {
 // Inneholder en sjekk for å avgjøre kilde-syntax.
 // Tar et dataset med JSON objekter som parameter.
 //
-// Er nå utvidet til å gjelde for både printing av datasettet og printing av sokeRes.
-// Ved å passere "res" som argument i printSet(sokeRes, "res"), så skjønner printSet() at det er sokeRes og at derfor .entries ikke trengs.
+// Er nå utvidet til å gjelde for både printing av datasettet og printing av searchRes.
+// Ved å passere "res" som argument i printSet(searchRes, "res"), så skjønner printSet() at det er searchRes og at derfor .entries ikke trengs.
 function printSet(set) {
   if(syntax == "leke") var param = "navn";
   else if(syntax == "toaletter") var param = "plassering";
@@ -242,7 +242,7 @@ function flagCheck() {
     printSet(dataset);
     markAuto(dataset);
     flag = 0;
-    sokeRes = []
+    searchRes = []
     return true;
   };
 
@@ -256,6 +256,8 @@ function flagCheck() {
 //
 
 function makeSearchobj() {
+  if(document.getElementById("sokinput").value == "") return;
+
   var gender = /(dame|ladies)/i;
   var price = /(pris:|price:)\d+|(gratis|free)/i;
   var wheelchair = /(rullestol|wheel chair)/i;
@@ -265,15 +267,16 @@ function makeSearchobj() {
   var searchParam =  document.getElementById("sokinput").value;
   searchObj = {};
 
-  if(!gender.test(searchParam.split(/\s/)[0])&!price.test(searchParam.split(/\s/)[0])&!wheelchair.test(searchParam.split(/\s/)[0])&!nursery.test(searchParam.split(/\s/)[0])&!open.test(searchParam.split(/\s/)[0])&!opennow.test(searchParam.split(/\s/)[0])) searchObj["navn"] = searchParam.split(/\s/)[0];
+  if(!gender.test(searchParam.split(/\s/)[0])&!price.test(searchParam.split(/\s/)[0])&!wheelchair.test(searchParam.split(/\s/)[0])&!nursery.test(searchParam.split(/\s/)[0])&!open.test(searchParam.split(/\s/)[0])&!opennow.test(searchParam.split(/\s/)[0])) searchObj["name"] = searchParam.split(/\s/)[0];
 
+  if(!gender.test(searchParam.split(/\s/)[1])&!price.test(searchParam.split(/\s/)[1])&!wheelchair.test(searchParam.split(/\s/)[1])&!nursery.test(searchParam.split(/\s/)[1])&!open.test(searchParam.split(/\s/)[1])&!opennow.test(searchParam.split(/\s/)[1])) searchObj["address"] = searchParam.split(/\s/)[1];
 
   if(gender.test(searchParam)) {
     searchObj["gender"] = "1";
   }
   if(price.test(searchParam)) {
     searchObj["price"] = searchParam.match(price)[0].split(/:/)[1];
-    if(searchObj.price == null) searchObj["price"] = "0"; // Dette er for å fange opp bruk av gratis som søkeord, slik at et søk kjører maksPris(0) hvis gratis eller free er til stede.
+    if(searchObj.price == null) searchObj["price"] = "0"; // Dette er for å fange opp bruk av gratis som søkeord, slik at et søk kjører maxPrice(0) hvis gratis eller free er til stede.
   }
   if(wheelchair.test(searchParam)) {
     searchObj["wheelchair"] = "1";
@@ -293,12 +296,14 @@ function makeSearchobj() {
 
 
 
-function nysokeFunk() {
+function searchFunc() {
   if(flagCheck() == true) return;
   makeSearchobj();
-  if(searchObj.price != null) maksPris(searchObj.price);
-  if(searchObj.gender == "1") harDame();
-  if(searchObj.nursery == "1") harStell();
+  if(searchObj.name != null) nameSearch();
+  if(searchObj.address != null) addrSearch();
+  if(searchObj.price != null) maxPrice(searchObj.price);
+  if(searchObj.gender == "1") hasWomen();
+  if(searchObj.nursery == "1") hasNursery();
   if(searchObj.opennow == "1") openNow();
   if(searchObj.wheelchair == "1") hasWheelchair();
   if(searchObj.open != null) openNow(searchObj.open);
@@ -308,8 +313,8 @@ function nysokeFunk() {
 
   refresh();
   showMarkers(false);
-  printSet(sokeRes, "res");
-  markAuto(sokeRes, "res");
+  printSet(searchRes, "res");
+  markAuto(searchRes, "res");
   //etc
 }
 
@@ -317,34 +322,60 @@ function nysokeFunk() {
 //IndexOf + Include (js-funksjoner til å matche treff)
 //
 // Siste utgave av sokeFunk().
-// Ser nå at grunnen til at sokeRes er global, er for at man kan sjekke om den er tom før man fyller den med treff.
+// Ser nå at grunnen til at searchRes er global, er for at man kan sjekke om den er tom før man fyller den med treff.
 // Kanskje dette kan unngås via flagCheck()?
 //
-// sokeRes[] og tempMarkers[] fylles med hhv JSON-objektene og de tilhørende markørene som søket resulterer i.
+// searchRes[] og tempMarkers[] fylles med hhv JSON-objektene og de tilhørende markørene som søket resulterer i.
 // Skjuler alle markørene før kun de med treff vises igjen.
 //
 // Lista tømmes før den fylles med treffene via printRes. Her ses kode som kanksje kan erstatte eller tas opp i flagCheck().
-function sokeFunk() {
-  if(document.getElementById("sokinput").value == "") return;
-  if(sokeRes.length != 0) sokeRes = [];
-  var sokeParam = document.getElementById("sokinput").value.toUpperCase();
-  var tempMarkers = [];
+function nameSearch() {
+  if(flagCheck() == true) return;
+
+if(ongoing == 1) {
+  var sokeParam = searchObj.name;
+  var tempRes = [];
+  for(i = 0; i < searchRes.length; i++) {
+    if(searchRes[i].navn.toUpperCase().includes(sokeParam)) {
+      tempRes.push(searchRes[i]);
+      };
+    }
+    searchRes = tempRes;
+    return;
+}
+  var sokeParam = searchObj.name;
   for(i = 0; i < dataset.entries.length; i++) {
-    if(dataset.entries[i].navn.toUpperCase().includes(sokeParam)) {
-      sokeRes.push(dataset.entries[i]);
-      tempMarkers.push(markers[i])
+    if(dataset.entries[i].plassering.toUpperCase().includes(sokeParam.toUpperCase())) {
+      searchRes.push(dataset.entries[i]);
       };
     }
 
-  if(sokeRes == 0) return;
+    if(Object.keys(searchObj).length > 1) {
+      ongoing = 1;
+      return;
+    }
 
   showMarkers(false);
-  for(i = 0; i < tempMarkers.length; i++) {
-    tempMarkers[i].setVisible(true);
-  };
+  markAuto(searchRes, "res");
 
   refresh();
-  printSet(sokeRes, "res");
+  printSet(searchRes, "res");
+}
+
+function addrSearch() {
+  if(flagCheck() == true) return;
+
+  if(ongoing == 1) {
+    var sokeParam = searchObj.address;
+    var tempRes = [];
+    for(i = 0; i < searchRes.length; i++) {
+      if(searchRes[i].adresse.toUpperCase().includes(sokeParam.toUpperCase())) {
+        tempRes.push(searchRes[i]);
+        };
+      }
+      searchRes = tempRes;
+      return;
+}
 }
 
 
@@ -358,55 +389,55 @@ function openNow() {
   now = time.getHours() + "." + time.getMinutes();
   if(flagCheck() == true) return;
   if(ongoing == 1) {
-    if(arguments.length != null) {
+    if(arguments.length != "0") {
     var tempRes = [];
-    for(i = 0; i < sokeRes.length; i++) {
+    for(i = 0; i < searchRes.length; i++) {
       tid = [];
-      tid = sokeRes[i].tid_hverdag.split(/[\s,]+/);
-      if(sokeRes[i].tid_hverdag == "ALL") {
+      tid = searchRes[i].tid_hverdag.split(/[\s,]+/);
+      if(searchRes[i].tid_hverdag == "ALL") {
         //x.push(i);
-        tempRes.push(sokeRes[i]);
+        tempRes.push(searchRes[i]);
       }
       else if(parseFloat(arguments[0]) >= tid[0] && parseFloat(arguments[0]) <= tid[2]) {
         //x.push(i);
-        tempRes.push(sokeRes[i]);
+        tempRes.push(searchRes[i]);
         }
       };
-      sokeRes = tempRes;
+      searchRes = tempRes;
       return;
     }
     else {
       var tempRes = [];
-      for(i = 0; i < sokeRes.length; i++) {
+      for(i = 0; i < searchRes.length; i++) {
       tid = [];
-      tid = sokeRes.tid_hverdag.split(/[\s,]+/);
-      if(sokeRes.tid_hverdag == "ALL") {
+      tid = searchRes[i].tid_hverdag.split(/[\s,]+/);
+      if(searchRes[i].tid_hverdag == "ALL") {
         //x.push(i);
-        tempRes.push(sokeRes[i]);
+        tempRes.push(searchRes[i]);
       }
       else if(parseFloat(now) >= tid[0] && parseFloat(now) <= tid[2]) {
         //x.push(i);
-        tempRes.push(sokeRes[i]);
+        tempRes.push(searchRes[i]);
         }
       };
-      sokeRes = tempRes;
+      searchRes = tempRes;
       return;
     }
 
   }
 
   var x = [];
-  if(arguments.length != null) {
+  if(arguments.length != "0") {
     for(i = 0; i < dataset.entries.length; i++) {
       tid = [];
       tid = dataset.entries[i].tid_hverdag.split(/[\s,]+/);
       if(dataset.entries[i].tid_hverdag == "ALL") {
         x.push(i);
-        sokeRes.push(dataset.entries[i]);
+        searchRes.push(dataset.entries[i]);
       }
       else if(parseFloat(arguments[0]) >= tid[0] && parseFloat(arguments[0]) <= tid[2]) {
         x.push(i);
-        sokeRes.push(dataset.entries[i]);
+        searchRes.push(dataset.entries[i]);
         }
       };
   }
@@ -416,11 +447,11 @@ function openNow() {
     tid = dataset.entries[i].tid_hverdag.split(/[\s,]+/);
     if(dataset.entries[i].tid_hverdag == "ALL") {
       x.push(i);
-      sokeRes.push(dataset.entries[i]);
+      searchRes.push(dataset.entries[i]);
     }
     else if(parseFloat(now) >= tid[0] && parseFloat(now) <= tid[2]) {
       x.push(i);
-      sokeRes.push(dataset.entries[i]);
+      searchRes.push(dataset.entries[i]);
       }
     };
   }
@@ -431,11 +462,9 @@ function openNow() {
   }
 
     showMarkers(false);
-    for(i = 0; i < x.length; i++) {
-      markers[x[i]].setVisible(true);
-    };
+    markAuto(searchRes, "res");
     refresh();
-    printSet(sokeRes, "res");
+    printSet(searchRes, "res");
     flag = 1;
 }
 
@@ -446,12 +475,12 @@ function openSunday() {
   if(flagCheck() == true) return;
   if(ongoing == 1) {
     var tempRes = [];
-    for(i = 0; i < sokeRes.length; i++) {
-      if(sokeRes[i].tid_sondag != "NULL") {
-        tempRes.push(sokeRes[i]);
+    for(i = 0; i < searchRes.length; i++) {
+      if(searchRes[i].tid_sondag != "NULL") {
+        tempRes.push(searchRes[i]);
         };
       };
-    sokeRes = tempRes;
+    searchRes = tempRes;
     return;
   }
 
@@ -459,7 +488,7 @@ function openSunday() {
   for(i = 0; i < dataset.entries.length; i++) {
     if(dataset.entries[i].tid_sondag != "NULL") {
       x.push(i);
-      sokeRes.push(dataset.entries[i]);
+      searchRes.push(dataset.entries[i]);
       };
     };
 
@@ -468,29 +497,26 @@ function openSunday() {
       return;
     }
 
-    showMarkers(false);
-    for(i = 0; i < x.length; i++) {
-      markers[x[i]].setVisible(true);
-    };
-
+  showMarkers(false);
+  markAuto(searchRes, "res");
   refresh();
-  printSet(sokeRes, "res");
+  printSet(searchRes, "res");
   flag = 1;
 }
 
 
 // Funksjon for å representere hvilke objekter som har dametoalett.
 // Nesten identisk som den over.
-function harDame() {
+function hasWomen() {
   if(flagCheck() == true) return;
   if(ongoing == 1) {
     var tempRes = [];
-    for(i = 0; i < sokeRes.length; i++) {
-      if(sokeRes[i].dame != "NULL") {
-        tempRes.push(sokeRes[i]);
+    for(i = 0; i < searchRes.length; i++) {
+      if(searchRes[i].dame != "NULL") {
+        tempRes.push(searchRes[i]);
         };
       };
-    sokeRes = tempRes;
+    searchRes = tempRes;
     return;
   }
 
@@ -498,7 +524,7 @@ function harDame() {
     for(i = 0; i < dataset.entries.length; i++) {
       if(dataset.entries[i].dame != "NULL") {
         x.push(i);
-        sokeRes.push(dataset.entries[i]);
+        searchRes.push(dataset.entries[i]);
         };
       };
 
@@ -508,35 +534,32 @@ function harDame() {
         return;
       }
 
-    showMarkers(false);
-    for(i = 0; i < x.length; i++) {
-      markers[x[i]].setVisible(true);
-    };
-
+  showMarkers(false);
+  markAuto(searchRes, "res");
   refresh();
-  printSet(sokeRes, "res");
+  printSet(searchRes, "res");
   flag = 1;
 }
 
 
 // Samme som de over, bare det handler om stellerom.
-function harStell() {
+function hasNursery() {
   if(flagCheck() == true) return;
   if(ongoing == 1) {
     var tempRes = [];
-    for(i = 0; i < sokeRes.length; i++) {
-      if(sokeRes[i].stellerom != "NULL") {
-        tempRes.push(sokeRes[i]);
+    for(i = 0; i < searchRes.length; i++) {
+      if(searchRes[i].stellerom != "NULL") {
+        tempRes.push(searchRes[i]);
         };
       };
-    sokeRes = tempRes;
+    searchRes = tempRes;
     return;
   }
     var x = [];
   for(i = 0; i < dataset.entries.length; i++) {
     if(dataset.entries[i].stellerom != "NULL") {
       x.push(i);
-      sokeRes.push(dataset.entries[i]);
+      searchRes.push(dataset.entries[i]);
       };
     };
 
@@ -546,36 +569,33 @@ function harStell() {
       return;
     }
 
-    showMarkers(false);
-    for(i = 0; i < x.length; i++) {
-      markers[x[i]].setVisible(true);
-    };
-
+  showMarkers(false);
+  markAuto(searchRes, "res");
   refresh();
-  printSet(sokeRes, "res");
+  printSet(searchRes, "res");
   flag = 1;
 }
 
 
 // Funksjon for å representerere de objektene som har pris under parameteren "pris".
 // Om man vil vise toaletter som er gratis føder man inn 0.
-function maksPris(pris) {
+function maxPrice(pris) {
   if(flagCheck() == true) return;
   if(ongoing == 1) {
     var tempRes = [];
-    for(i = 0; i < sokeRes.length; i++) {
-      if(parseFloat(sokeRes[i].pris) <= parseFloat(pris) | sokeRes[i].pris == "NULL") {
-        tempRes.push(sokeRes[i]);
+    for(i = 0; i < searchRes.length; i++) {
+      if(parseFloat(searchRes[i].pris) <= parseFloat(pris) | searchRes[i].pris == "NULL") {
+        tempRes.push(searchRes[i]);
         };
       };
-    sokeRes = tempRes;
+    searchRes = tempRes;
     return;
   }
   var x = [];
   for(i = 0; i < dataset.entries.length; i++) {
     if(parseFloat(dataset.entries[i].pris) <= parseFloat(pris) | dataset.entries[i].pris == "NULL") {
       x.push(i);
-      sokeRes.push(dataset.entries[i]);
+      searchRes.push(dataset.entries[i]);
       };
     };
 
@@ -584,13 +604,10 @@ function maksPris(pris) {
       return;
     }
 
-    showMarkers(false);
-    for(i = 0; i < x.length; i++) {
-      markers[x[i]].setVisible(true);
-    };
-
+  showMarkers(false);
+  markAuto(searchRes, "res");
   refresh();
-  printSet(sokeRes, "res");
+  printSet(searchRes, "res");
   flag = 1;
 }
 
@@ -598,19 +615,19 @@ function hasWheelchair() {
   if(flagCheck() == true) return;
   if(ongoing == 1) {
     var tempRes = [];
-    for(i = 0; i < sokeRes.length; i++) {
-      if(sokeRes[i].rullestol == "1") {
-        tempRes.push(sokeRes[i]);
+    for(i = 0; i < searchRes.length; i++) {
+      if(searchRes[i].rullestol == "1") {
+        tempRes.push(searchRes[i]);
         };
       };
-    sokeRes = tempRes;
+    searchRes = tempRes;
     return;
   }
     var x = [];
     for(i = 0; i < dataset.entries.length; i++) {
       if(dataset.entries[i].rullestol == "1") {
         x.push(i);
-        sokeRes.push(dataset.entries[i]);
+        searchRes.push(dataset.entries[i]);
         };
       };
 
@@ -619,13 +636,10 @@ function hasWheelchair() {
       return;
     }
 
-      showMarkers(false);
-      for(i = 0; i < x.length; i++) {
-        markers[x[i]].setVisible(true);
-      };
-
+    showMarkers(false);
+    markAuto(searchRes, "res");
     refresh();
-    printSet(sokeRes, "res");
+    printSet(searchRes, "res");
     flag = 1;
 }
 
