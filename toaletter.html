@@ -25,10 +25,9 @@
         </object>
         <aside class="lavs">
           <input type="text" id="sokinput" placeholder="Søkekriterier her...">
-          <button type="button" id="sok" onclick="sokeFunk()"> Søk i toaletter </button>
+          <button type="button" id="sok" onclick="searchFunc()"> Søk i toaletter </button>
           <a onclick="refresh()" href="#">Refresh<a>
           <details id="filter">
-            <button type="button" class="w3-button w3-tiny" id="asok" onclick="asokeFunk()"> Avansert søk </button>
             <div id="big">
               <div class="container">
                 <p class="small">Åpen nå?</p>
@@ -40,17 +39,25 @@
               </div>
               <div class="container">
                 <p class="small">Dametoalett?</p>
-                <input class="checkBox" type="checkbox" onclick="harDame()">
+                <input class="checkBox" type="checkbox" onclick="hasWomen()">
               </div>
               <div class="container">
                 <p class="small">Stellerom?</p>
-                <input class="checkBox" type="checkbox" onclick="harStell()">
+                <input class="checkBox" type="checkbox" onclick="hasNursery()">
               </div>
-              <!--<div class="container">
-                <button type="button" class="w3-button w3-tiny" id="asok" onclick="asokeFunk()"> Avansert søk </button>
-              </div>-->
-             </div>
 
+             </div>
+             <div id="big">
+               <div class="container">
+                 <p class="small">Rullstol?</p>
+                 <input class="checkBox" type="checkbox" onclick="hasWheelchair()">
+               </div>
+               <div class="container">
+                 <p class="small">Maks pris?</p>
+                 <input type="text" id="pris">
+                 <input class="checkBox" type="checkbox" onclick="maxPricehtml()">
+               </div>
+              </div>
           </details>
           <ul id="liste"></ul>
         </aside>
