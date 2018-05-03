@@ -18,7 +18,15 @@
         <li><a href="utsikt.html">Utsiktspunkter</a></li>
       </ul>
     </nav>
-
+    <h2> Velg lekeplass </h2>
+    <hr />
+    <select id="slct_leke" name="slct_leke" onchange="getDistanceFromLatLonInKm()"> // onchange må loade koordinasjonsfunksjon til nærmeste toalett
+      <option value=""></option>
+      <option value="leke"></option> // implementere datasett inn her
+    </select>
+    <hr />
+    <h2> Nærmeste toalett: </h2
+    <p id="nearest_toil"> </p>
 
 
 
