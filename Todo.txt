@@ -1,25 +1,23 @@
-Fullføre sokeFunk()
-  - Beskrive søkeobjektet som skal holde parameteret globalt?
-  - Bruk RegExp for å analysere sokeParam og eventuelt inndele delene av søkeinputet og bruke dem til å definere søkeobjektet. Omfattende.
-  - Gjøre det nåværende søket datasettuavhengig.
-
 Optimalisere stylinga
   - Sluttføre inndeling av de 4 grenseverdiene som definerer stylinga, slik at de utfører 4 helhetlige og passende layout.
   - Eventuell designoptimalisering?
-  - Bytte navnet fra alternativ...
-  - Optimalisere lekeplassser.html.
-  - Ta stilling til detaljer-løsninga.
+  - Bytte navnet fra alternativ...!
+  - Optimalisere lekeplassser.html. -se Toaletter
+
 
 Den tredje siden
-  - Opprette den.
   - Style den.
   - Skrive funksjoner for å utføre oppgaveteksten.
+  - Presentere DOM-elementet og nærmeste nabo.
+  -
 
-De booleanske søkefunksjonene
-  - Sluttføre dem?
-  - Ta stilling til flagCheck() problematikken.
-  - Fjerne dem?
+Søket
+  - Gjøre det mulig å søke på navn og adresse.
+  - Knytte søkeknappen opp mot funksjonen.
 
-markAuto()
-  - Når et søk gjøres og markører som representerer treff skal vises, så har de "gammel" label.
-  - Skal funksjonen gjøres mer generell?
+Toaletter
+  - Lage element for pris, rullestol, Stellerom
+  - Påse at disse også interakterer.
+
+Markers
+  - Fjern rester av gammel markerstruktur

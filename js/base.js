@@ -107,7 +107,7 @@ function initList(url) {
   hentUrl(url).then(function (result) {
     dataset = JSON.parse(result);
     printSet(dataset);
-    markAuto();
+    markAuto(dataset);
 
   });
 }
@@ -121,10 +121,12 @@ function initList(url) {
 // Det er viktig at this brukes for å få tak i innholdet vi lagrer i markøren.
 //
 // Til slutt fylles markers-arrayet.
-function markAuto() {
+function markAuto(set) {
+  if(syntax == "leke") var param = "navn";
+  else if(syntax == "toaletter") var param = "plassering";
 
-
-    for(i = 0; i < dataset.entries.length; i++) {
+  if(arguments[1] == "res") {
+    for(i = 0; i < set.length; i++) {
       var content = document.createElement("div");
       content.setAttribute("class", "content");
 
@@ -134,8 +136,8 @@ function markAuto() {
 
       var firstHeading = document.createElement("h1");
       firstHeading.setAttribute("id", "firstHeading");
-      if(syntax == "leke") var holder1 = dataset.entries[i].navn;
-      else if(syntax == "toaletter") var holder1 = dataset.entries[i].plassering;
+      if(syntax == "leke") var holder1 = set[i].navn;
+      else if(syntax == "toaletter") var holder1 = set[i].plassering;
       var headingText = document.createTextNode((i+1) + ". " + holder1);
       firstHeading.appendChild(headingText);
       content.appendChild(firstHeading);
@@ -143,13 +145,13 @@ function markAuto() {
       var bodyContent = document.createElement("div");
       bodyContent.setAttribute("class", "bodyContent");
       if(syntax == "leke") var holder2 = "";
-      else if(syntax == "toaletter") var holder2 = dataset.entries[i].adresse;
+      else if(syntax == "toaletter") var holder2 = set[i].adresse;
       var paraText = document.createTextNode(holder2);
       bodyContent.appendChild(paraText);
       content.appendChild(bodyContent);
 
       var infoWindow = new google.maps.InfoWindow();
-      var tempPos = {lat: parseFloat(dataset.entries[i].latitude), lng: parseFloat(dataset.entries[i].longitude)};
+      var tempPos = {lat: parseFloat(set[i].latitude), lng: parseFloat(set[i].longitude)};
       var marker = new google.maps.Marker({
         position: tempPos,
         map: map,
@@ -163,6 +165,48 @@ function markAuto() {
         });
       markers.push(marker);
     };
+
+  }
+
+  for(i = 0; i < set.entries.length; i++) {
+    var content = document.createElement("div");
+    content.setAttribute("class", "content");
+
+    var sideNotice = document.createElement("div");
+    sideNotice.setAttribute("class", "sideNotice");
+    content.appendChild(sideNotice);
+
+    var firstHeading = document.createElement("h1");
+    firstHeading.setAttribute("id", "firstHeading");
+    if(syntax == "leke") var holder1 = set.entries[i].navn;
+    else if(syntax == "toaletter") var holder1 = set.entries[i].plassering;
+    var headingText = document.createTextNode((i+1) + ". " + holder1);
+    firstHeading.appendChild(headingText);
+    content.appendChild(firstHeading);
+
+    var bodyContent = document.createElement("div");
+    bodyContent.setAttribute("class", "bodyContent");
+    if(syntax == "leke") var holder2 = "";
+    else if(syntax == "toaletter") var holder2 = set.entries[i].adresse;
+    var paraText = document.createTextNode(holder2);
+    bodyContent.appendChild(paraText);
+    content.appendChild(bodyContent);
+
+    var infoWindow = new google.maps.InfoWindow();
+    var tempPos = {lat: parseFloat(set.entries[i].latitude), lng: parseFloat(set.entries[i].longitude)};
+    var marker = new google.maps.Marker({
+      position: tempPos,
+      map: map,
+      content: content,
+      label: (i+1).toString()
+    });
+
+    marker.addListener('click', function() {
+        infoWindow.setContent(this.content);
+        infoWindow.open(map, this);
+      });
+    markers.push(marker);
+  };
 }
 
 
@@ -200,7 +244,7 @@ function flagCheck() {
   if(flag == 1) {
     refresh();
     printSet(dataset);
-    showMarkers(true);
+    markAuto(dataset);
     flag = 0;
     sokeRes = []
     return true;
@@ -267,7 +311,9 @@ function nysokeFunk() {
   if(Object.keys(searchObj).length == 1) return;
 
   refresh();
+  showMarkers(false);
   printSet(sokeRes, "res");
+  markAuto(sokeRes, "res");
   //etc
 }
 
