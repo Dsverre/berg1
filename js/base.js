@@ -697,14 +697,14 @@ function loadXMLDoc() {
   var xmlhttp = new XMLHttpRequest();
   xmlhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
-      myFunction(this);
+      viewPoint(this);
     }
   };
   xmlhttp.open("GET", "https://hotell.difi.no/api/xml/stavanger/utsiktspunkt?", true);
   xmlhttp.send();
 }
 
-function myFunction(xml) {
+function viewPoint(xml) {
   var x, i, xmlDoc, txt;
   xmlDoc = xml.responseXML;
   txt = "";
