@@ -1,7 +1,35 @@
+Rapport – Semesteroppgave INFO134
 Zip-filen inneholder følgende filer:
   html:
     - index.html (Framside)
     - toaletter.html (Side med kart og tilhørende liste over offentlige toalett i Bergen sentrum)
     - lekeplasser.html (Side med kart og tilhørende liste over lekeplasser i Bergen sentrum)
-    - fav-leke.html (Dropdown liste der man skal kunne velge et element fra lekeplass datasettet, man skal deretter kunne få opp nærmeste toalett)
+    - fav-leke.html (Dropdown liste der man skal kunne velge et element fra lekeplass                                                          datasettet, man skal deretter kunne få opp nærmeste toalett)
     - utsikt.html (side som inneholder liste med utsiktspunkter)
+
+Videre har vi base.css og base.js. Disse to filene inneholder da CSS og javascript.
+Vi har bestemt oss for å holde all CSS og javascript i et dokument hver. Vi ser på
+dette som det enkleste, og man slipper da krøll med linking til flere forskjellige
+CSS/javascript dokument. I mange tilfeller, når spesielt javascript filene blir store
+og mange, kan det oppstå tregere loading av sidene.
+Siden spesielt all javascript er i et dokument er det viktig å kommentere alle
+funksjoner, dette har vi forsøkt å være nøye på.
+
+Oppgave 1. er løst i base.CSS
+
+Oppgave 2. og 3. er løst med hjelp av variablene var dataset; og var syntax.
+Videre er funksjonene window.onload = function(), function hentUrl(url) og
+«function initList(url)» brukt.
+
+Oppgave 4 er løst med hjelp av variablene «var markers[]» og «var map;». Her brukes funksjonene function initMap(), function printSet(set), function initList(url) og function markAuto(set).
+
+I Oppgave 5 brukes variablene var søkeRes[], var flag = 0. Funksjoner som blir brukt er function flagCheck(), function makeSearchobj(), function nysokeFunk(), function openNow(), function harDame(), function harStell(), function maksPris(pris) og function hasWheelchair().
+
+Oppgave 6 er løst ved gjenbruk av variabler og funksjoner fra oppgave 2,3 og 4.
+I oppgave 7 brukes funksjonen function getDistanceFromLatLonInKm(lat1,lon1,lat2,lon2) med tilhørende lokale variabler.
+
+Oppgave 8 og 9 brukes det en dropdown liste som har som intensjon å printe ut lekeplass datasettet, når et av lekeplass elementene er valgt er meningen at onchange metoden skal gjøre funksjonen function getDistanceFromLatLonInKm(lat1,lon1,lat2,lon2). Det er videre meningen at nærmeste toalett til den bestemte lekeplassen skal printes.
+
+Oppgave 10 er første steg løst med function loadXMLDoc() og function viewPoint(xml) med tilhørende lokale variabler.
+
+For å se mer forklaring på globale variabler og funksjoner er dette forklart ved hjelp av kommentering i base.js.
