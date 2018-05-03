@@ -1,14 +1,14 @@
-
+/* Denne fila har bare midlertidig navn alternativ.css. Når overgangen er god kan den bytte navn */
 img {
   max-width: 100%;
 }
 
-.nav {
+nav {
   width: 100%;
 }
 
 
-ul {
+nav ul {
     list-style-type: none;
     margin: 0;
     padding: 0;
@@ -16,11 +16,12 @@ ul {
     background-color: #333;
 }
 
-li {
+nav li {
     float: left;
+
 }
 
-li a {
+nav li a  {
     display: block;
     color: white;
     text-align: center;
@@ -28,101 +29,162 @@ li a {
     text-decoration: none;
 }
 
-li a:hover:not(.active) {
+nav li a:hover:not(.active) {
     background-color: #111;
 }
 
-.active {
+nav a.active {
     background-color: SkyBlue;
 }
 
-#map {
-        height: 600px;
-        width: 100%;
-       }
-
-@media screen and (max-width:750px) {
-
-  .Intro {
-    display: table;
-    table-layout: fixed;
-    width: 100%;
-  }
-
-  .Widget {
-    display: table-row;
-    vertical-align: top;
-    width: 100%;
-    padding: 14px 16px;
-  }
-
-  .image {
-    display: table-row;
-    vertical-align: top;
-    width: 100%;
-    padding: 14px 16px;
-  }
-
-  #idag {
-    display: table-row;
-    vertical-align: top;
-    width: 30%
-    text-align: center;
-    padding: .5rem;
-    font-size: 1.0rem;
-    font-family: "Trebuchet MS", Verdana, sans-serif;
-  }
-
-  #Velk {
-    display: table-row;
-    vertical-align: top;
-    width: 30%
-    text-align: center;
-    padding: .5rem;
-    font-size: 2.0rem;
-    font-family: "Trebuchet MS", Verdana, sans-serif;
-  }
+#asok {
+  margin-left: 150px;
 
 }
 
-@media screen and (min-width: 750px) {
-  .Intro {
-    display: table;
-    table-layout: fixed;
+#liste {
+  margin-top: 20px;
+  margin-left: 10px;
+  text-align: left;
+  list-style-type: none;
+}
+
+#filter {
+
+  margin-left: 12%;
+  text-align: left;
+}
+
+#big {
+  display: flex;
+  flex-direction: row;
+}
+
+.checkBox {
+  margin: auto;
+}
+
+.container {
+  display: flex;
+  width: 33%;
+  flex-direction: column;
+  text-align: center;
+
+}
+
+.small {
+    height: 30px;
+    margin: 0;
+    margin-top: 15px;
+
+}
+
+@media screen and (max-width:750px) {
+
+  .main {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .intro {
+    text-align: center;
+  }
+
+  .lavs {
+    min-width: 323px;
+    margin-top: 30px;
+    text-align: center;
+  }
+
+  #map {
+    height: 450px;
     width: 100%;
   }
 
-  .image {
-    display: table-cell;
-    width: 70%;
-    vertical-align: middle;
-    padding: 14px 16px;
+  #widget {
+    margin-top: 30px;
+    text-align: center;
+  }
+}
+
+@media screen and (min-width: 750px) {
+
+  .main {
+    display: flex;
+    width: 100%;
+    flex-direction: row;
   }
 
-  .Widget {
-    display: table-cell;
+  .intro {
     width: 40%;
-    vertical-align: middle;
-    padding: 14px 16px;
+    height: 100%;
+    text-align: center;
   }
 
-  #idag {
-    display: table-cell;
-    width: 60%
-    vertical-align: middle;
-    text-align: center;
-    padding: .5rem;
-    font-size: 1.5rem;
-    font-family: "Trebuchet MS", Verdana, sans-serif;
+  .image {
+    width: 60%;
+    height: 100%;
   }
 
-  #Velk {
-    display: table-cell;
-    width: 30%
-    vertical-align: middle;
+  .lavs {
+    width: 60%;
+    min-width: 323px;
+    margin-top: 30px;
     text-align: center;
-    padding: .5rem;
-    font-size: 2.5rem;
-    font-family: "Trebuchet MS", Verdana, sans-serif;
+  }
+
+  #map {
+          height: 600px;
+          width: 100%;
+  }
+
+  #widget {
+    width: 60%;
+    height: 100%;
+    text-align: center;
+  }
+}
+
+@media screen and (min-width: 1600px) {
+
+  .main {
+    display: flex;
+    width: 100%;
+    flex-direction: row;
+  }
+
+  .intro {
+    width: 40%;
+    height: 100%;
+    text-align: center;
+  }
+
+  .image {
+    width: 60%;
+    height: 100%;
+  }
+
+  .lavs {
+    width: 40%;
+    margin-top: 30px;
+    text-align: center;
+  }
+
+  #map {
+          height: 1000px;
+          width: 100%;
+  }
+
+  #widget {
+    width: 60%;
+    height: 100%;
+    text-align: center;
+  }
+}
+
+@media screen and (min-height: 1800px) {
+  #map {
+    height: 1600px;
   }
 }
